@@ -1,0 +1,188 @@
+<html>
+
+<head>
+    <title>Responsive App Layout</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            /* Center the div horizontally */
+            align-items: center;
+            /* Center the div vertically */
+            min-height: 100vh;
+            /* Full height of the viewport */
+            background-color: #f0f0f0;
+            /* Background color */
+        }
+
+        .div {
+            background: #ffffff;
+            width: 393px;
+            height: 850px;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.8);
+            /* Scale down the app */
+            transform-origin: top center;
+            /* Scale from the top */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            /* Optional: Add shadow for depth */
+        }
+
+        /* Group image styles */
+        .groupoImg-1 {
+            background: #1c98ed;
+            border-radius: 25px;
+            width: 318px;
+            height: 65px;
+            position: absolute;
+            left: 37px;
+            top: 760px;
+        }
+
+        .addBtn {
+            color: #ffffff;
+            text-align: left;
+            font-family: 'Pretendard-SemiBold', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            position: absolute;
+            left: 152px;
+            top: 777px;
+            width: 100px;
+            height: 30px;
+        }
+
+        .groupoImg-2,
+        .groupoImg-3,
+        .groupoImg-4,
+        .groupoImg-5 {
+            background: #d9d9d9;
+            border-radius: 10px;
+            border-style: solid;
+            border-color: #1c98ed;
+            border-width: 1.5px;
+            width: 122px;
+            height: 122px;
+            position: absolute;
+        }
+
+        .groupoImg-2 {
+            left: 51px;
+            top: 148px;
+        }
+
+        .groupoImg-3 {
+            left: 223px;
+            top: 148px;
+        }
+
+        .groupoImg-4 {
+            left: 51px;
+            top: 337px;
+        }
+
+        .groupoImg-5 {
+            left: 223px;
+            top: 337px;
+        }
+
+        /* Group labels */
+        .group1,
+        .group2,
+        .group3,
+        .group4 {
+            color: #1c98ed;
+            text-align: left;
+            font-family: 'Pretendard-SemiBold', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            position: absolute;
+        }
+
+        .group1 {
+            left: 56px;
+            top: 124px;
+        }
+
+        .group2 {
+            left: 228px;
+            top: 124px;
+        }
+
+        .group3 {
+            left: 56px;
+            top: 313px;
+        }
+
+        .group4 {
+            left: 228px;
+            top: 313px;
+        }
+
+        .our-home {
+            color: #000000;
+            text-align: center;
+            font-family: 'Pretendard-Medium', sans-serif;
+            font-size: 24px;
+            font-weight: 500;
+            position: absolute;
+            left: 140px;
+            top: 43px;
+            width: 113px;
+            height: 25px;
+        }
+
+        .alarm {
+            width: 8.91%;
+            height: 4.11%;
+            position: absolute;
+            right: 8.14%;
+            bottom: 91.31%;
+            overflow: visible;
+        }
+
+        .line {
+            width: 349px;
+            height: 25px;
+            position: absolute;
+            left: calc(50% - 174.5px);
+            top: 80px;
+            overflow: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="div">
+        <div class="groupoImg-1"></div>
+        <div class="addBtn"> 그룹추가 </div>
+        <div class="groupoImg-2"></div>
+        <div class="groupoImg-3"></div>
+        <div class="groupoImg-4"></div>
+        <div class="groupoImg-5"></div>
+        <div class="group1"> 우리집 </div>
+        <div class="group2"> 기숙사 </div>
+        <div class="group3"> 쉐어하우스 </div>
+        <div class="group4"> 공동작업실 </div>
+        <div class="our-home"> OurHome </div>
+        <svg class="alarm" width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M28.957 14.6044C28.957 5.80026 24.1719 2.80541 19.6966 2.13789C19.6966 2.09278 19.7057 2.04768 19.7057 1.99356C19.7057 0.88402 18.7122 0 17.5 0C16.2878 0 15.3307 0.88402 15.3307 1.99356C15.3307 2.04768 15.3307 2.09278 15.3398 2.13789C10.8555 2.81443 6.04297 5.8183 6.04297 14.6224C6.04297 24.8879 3.46354 25.9884 0 28.875H35C31.5547 25.9794 28.957 24.8698 28.957 14.6044Z"
+                fill="#1C98ED" />
+            <path d="M17.5 35C19.7679 35 21.6296 33.3802 21.875 31.5H13.125C13.3619 33.3802 15.2321 35 17.5 35Z"
+                fill="#1C98ED" />
+        </svg> <!-- 알람 이미지 -->
+        <svg class="line" width="349" height="25" viewBox="0 0 349 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
+        </svg> <!-- 경계선 이미지 -->
+    </div>
+</body>
+
+</html>
