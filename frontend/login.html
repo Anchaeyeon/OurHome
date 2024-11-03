@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    @media screen and (max-width: 394px) and (max-height: 853px) {
+    @font-face {
+        font-family: 'Pretendard-Regular';
+        src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    body, html {
+        width: 100%;
+        height: 100%;
+    }
+
+    .login {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    p {
+        font-family: 'Pretendard-Regular';
+        font-size: 24px;
+        font-weight: 500;
+        padding-top: 65%;
+    }
+
+    .btn-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        row-gap: 10px;
+    }
+
+    .login-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Pretendard-Regular';
+        gap: 10px; /* 아이콘과 텍스트 간 간격 */
+        width: 286px;
+        height: 53px;
+        border-radius: 20px;
+        border: 1px solid #000;
+        background: #FFF;
+    }
+
+    img {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+    </style>
+    <title>login</title>
+</head>
+
+<body>
+    <div class="login">
+        <p>login</p>
+    </div>
+    <div class="btn-content">
+        <button class="login-btn">
+            <img src="/img/google.png" alt="">
+            ⠀ 구글로 로그인 하기
+        </button>
+        <button class="login-btn">
+            <img src="/img/naver.png" alt="">
+            네이버로 로그인 하기
+        </button>
+        <button class="login-btn">
+            <img src="/img/kakao.png" alt="">
+            kakao로 로그인 하기
+        </button>
+    </div>
+</body>
+
+</html>

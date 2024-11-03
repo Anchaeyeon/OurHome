@@ -76,6 +76,6 @@ app.delete('/api/users/:id', (req, res) => {
 // 서버 실행
 const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`서버가 ${PORT} 포트에서 실행 중입니다`);
+    console.log(`서버가 ${PORT} 포트에서 실행 중입니다!`);
 });
          
