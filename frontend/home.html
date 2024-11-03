@@ -33,9 +33,15 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Group image styles */
-        .groupoImg-1 {
-            background: #1c98ed;
+        .addBtn {
+            color: #ffffff;
+            background-color: #1c98ed;
+            border: none;
+            text-align: center;
+            font-family: 'Pretendard-SemiBold', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            cursor: pointer;
             border-radius: 25px;
             width: 318px;
             height: 65px;
@@ -43,63 +49,6 @@
             left: 37px;
             top: 760px;
         }
-
-        .addBtn {
-            color: #ffffff;
-            background-color: #1c98ed;
-            border: none;
-            border-radius: 5px;
-            text-align: center;
-            font-family: 'Pretendard-SemiBold', sans-serif;
-            font-size: 24px;
-            font-weight: 600;
-            position: absolute;
-            left: 152px;
-            top: 777px;
-            width: 100px;
-            height: 40px;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .groupoImg-2,
-        .groupoImg-3,
-        .groupoImg-4,
-        .groupoImg-5 {
-            background: #d9d9d9;
-            border-radius: 10px;
-            border: 1.5px solid #1c98ed;
-            width: 122px;
-            height: 122px;
-            position: absolute;
-        }
-        .groupoImg-2 {   left: 51px; top: 148px; }
-
-        .groupoImg-3 { left: 223px; top: 148px; }
-
-        .groupoImg-4 {  left: 51px; top: 337px; }
-
-        .groupoImg-5 {
-            left: 223px;
-            top: 337px;
-        }
-
-        /* Group labels */
-        .group1,
-        .group2,
-        .group3,
-        .group4 {
-            color: #1c98ed;
-            text-align: left;
-            font-family: 'Pretendard-SemiBold', sans-serif;
-            font-size: 16px;
-            font-weight: 600;
-            position: absolute;
-        }
-        .group1 { left: 56px;  top: 124px; }
-        .group2 { left: 228px; top: 124px; }
-        .group3 {    left: 56px;    top: 313px;}
-        .group4 {     left: 228px;      top: 313px; }
 
         .our-home {
             color: #000000;
@@ -114,13 +63,16 @@
             height: 25px;
         }
 
-                /* 도어벨 이미지 크기 조절 및 오른쪽으로 이동 */
+        /* 도어벨 이미지 크기 조절 및 오른쪽으로 이동 */
         #alarm {
-            width: 35px; /* 원하는 크기로 설정 */
+            width: 35px;
+            /* 원하는 크기로 설정 */
             height: auto;
             position: absolute;
-            right: 30px; /* 오른쪽 여백 설정 */
-            top: 40px; /* 원하는 위치에 맞게 위쪽 여백 설정 */
+            right: 30px;
+            /* 오른쪽 여백 설정 */
+            top: 40px;
+            /* 원하는 위치에 맞게 위쪽 여백 설정 */
         }
 
         .line {
@@ -132,8 +84,9 @@
             overflow: visible;
         }
 
-         .modal {
-            display: none; /* 팝업 기본 감춤 */
+        .modal {
+            display: none;
+            /* 팝업 기본 감춤 */
             position: fixed;
             z-index: 1;
             left: 0;
@@ -155,7 +108,8 @@
 
         .close {
             float: right;
-             width: 35px; /* 버튼 이미지 크기 */
+            width: 35px;
+            /* 버튼 이미지 크기 */
             height: 35px;
             font-weight: bold;
             cursor: pointer;
@@ -174,9 +128,11 @@
             width: 100%;
             padding: 12px;
             margin: 10px 0;
-            background-color: #BFE4F9; /* 하늘색 배경 */
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
             border: 1px solid #ccc;
-            border-radius: 10px; /* 둥근 모서리 */
+            border-radius: 10px;
+            /* 둥근 모서리 */
             box-sizing: border-box;
         }
 
@@ -186,9 +142,11 @@
             width: 100%;
             padding: 12px;
             margin-top: 10px;
-            background-color: #BFE4F9; /* 하늘색 배경 */
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
             border: 1px solid #ccc;
-            border-radius: 10px; /* 둥근 모서리 */
+            border-radius: 10px;
+            /* 둥근 모서리 */
             box-sizing: border-box;
             cursor: pointer;
         }
@@ -204,9 +162,47 @@
             border: none;
             border-radius: 15px;
             cursor: pointer;
-            margin: 15px auto 0; /* 중앙 정렬 */
+            margin: 15px auto 0;
+            /* 중앙 정렬 */
             margin-top: 15px;
             box-sizing: border-box;
+        }
+
+        .group-container {
+            margin: 10px;
+            /* 그룹 간 여백 */
+            text-align: center;
+            /* 텍스트 중앙 정렬 */
+            flex: 0 0 calc(50% - 20px);
+            /* 두 개의 열로 설정, 여백 고려 */
+        }
+
+        .group-image {
+            width: 150px;
+            /* 이미지 너비 */
+            height: 150px;
+            /* 이미지 높이 */
+            object-fit: cover;
+            /* 이미지 비율 유지 */
+            border-radius: 8px;
+            /* 선택 사항: 모서리 둥글게 */
+        }
+
+        .group-label {
+            margin-top: 5px;
+            /* 이미지와 텍스트 간 여백 */
+            font-size: 16px;
+            /* 텍스트 크기 조정 */
+        }
+
+        #groupsContainer {
+            display: flex;
+            flex-wrap: wrap;
+            /* 줄바꿈 허용 */
+            justify-content: flex-start;
+            /* 왼쪽 정렬 */
+            margin-top: 100px;
+            /* 그룹 위쪽 여백 */
         }
     </style>
 </head>
@@ -214,35 +210,29 @@
 <body>
     <div class="div">
         <div class="groupoImg-1"></div>
-        <button class="addBtn" onclick="openModal()"> 그룹추가 </button>
-        <div class="groupoImg-2"></div>
-        <div class="groupoImg-3"></div>
-        <div class="groupoImg-4"></div>
-        <div class="groupoImg-5"></div>
-        <div class="group1"> 우리집 </div>
-        <div class="group2"> 기숙사 </div>
-        <div class="group3"> 쉐어하우스 </div>
-        <div class="group4"> 공동작업실 </div>
+        <button class="addBtn" onclick="openModal()"> 그룹 추가 </button>
         <div class="our-home"> OurHome </div>
         <img src="img/doorball.png" id="alarm">
         <svg class="line" width="349" height="2" viewBox="0 0 349 2" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 0H349V1.5625H0V0Z" fill="black" fill-opacity="0.3" />
         </svg>
-        
+
+        <!-- Container for dynamically created groups -->
+        <div id="groupsContainer"></div>
     </div>
 
     <!-- The Modal -->
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <img src="img/xBtn.png" class="close" onclick="closeModal()" alt="닫기 버튼">
-        <h2>그룹 추가</h2>
-        <p>그룹이름</p>
-        <input type="text" placeholder="그룹 이름" id="groupName">
-        <p>그룹 사진 추가</p> 
-        <input type="file" class="file-upload" accept="image/*">
-        <button class="add-button">추가</button>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <img src="img/xBtn.png" class="close" onclick="closeModal()" alt="닫기 버튼">
+            <h2>그룹 추가</h2>
+            <p>그룹 이름</p>
+            <input type="text" placeholder="그룹 이름" id="groupName">
+            <p>그룹 사진 추가</p>
+            <input type="file" class="file-upload" accept="image/*" id="groupImageInput">
+            <button class="add-button" onclick="addGroup()">추가</button>
+        </div>
     </div>
-</div>
 
     <script>
         function openModal() {
@@ -253,6 +243,40 @@
             document.getElementById("myModal").style.display = "none";
         }
 
+        function addGroup() {
+            const groupName = document.getElementById("groupName").value;
+            const fileInput = document.getElementById("groupImageInput");
+
+            //그룹이름이나 사진이 없는 경우
+            if (groupName.trim() === '' || fileInput.files.length === 0) {
+                alert("그룹 이름과 사진을 모두 입력해주세요."); // Alert if either is missing
+                return;
+            }
+
+            const groupDiv = document.createElement("div");
+            groupDiv.className = "group-container";
+
+            const groupLabel = document.createElement("div");
+            groupLabel.className = "group-label";
+            groupLabel.innerText = groupName;
+
+            const groupImage = document.createElement("img");
+            groupImage.className = "group-image";
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                groupImage.src = e.target.result; // Set the src to the uploaded image
+                groupDiv.appendChild(groupImage); // Append the image to the group container
+                groupDiv.appendChild(groupLabel); // Append the label to the group container
+                document.getElementById("groupsContainer").appendChild(groupDiv); // Append to the main container
+            };
+            reader.readAsDataURL(fileInput.files[0]); // Read the image file
+
+            //  closeModal()을 호출해 모달을 닫고, 입력 필드를 빈 값으로 설정하여 사용자가 새로운 입력을 할 수 있도록 준비
+            closeModal();
+            document.getElementById("groupName").value = '';
+            fileInput.value = '';
+        }
     </script>
 </body>
 
