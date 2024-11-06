@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="ko">
-
+<html>
 <head>
-    <!-- Pretendard 폰트 로드 -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pretendard:wght@500&display=swap">
-    <meta charset="UTF-8">
-    <title>Responsive App Layout</title>
+    <title></title>
     <style>
-        * {
+ * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -32,66 +27,99 @@
             transform-origin: top center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-
-        .addBtn {
-            color: #ffffff;
-            background-color: #1c98ed;
-            border: none;
-            text-align: center;
-            font-family: 'Pretendard-SemiBold', sans-serif;
-            font-size: 24px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 25px;
-            width: 318px;
-            height: 65px;
+       .line {
+            width: 349px;
+            height: 25px;
             position: absolute;
-            left: 37px;
-            top: 760px;
+            left: calc(50% - 176.5px);
+            top: 78px;
+            overflow: visible;
         }
 
-        .our-home {
+        .groupAdd {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            left: 310px;
+            top: 680px;
+            overflow: visible;
+        }
+
+        .returnBtn {
+            width: 2.54%;
+            height: 2.35%;
+            position: absolute;
+            right: 87.02%;
+            left: 10.43%;
+            bottom: 92.02%;
+            top: 5.63%;
+            transform: translate(-11.5px, -1.5px);
+            overflow: visible;
+        }
+
+        .groupName {
             color: #000000;
-            text-align: center;
+            text-align: left;
             font-family: 'Pretendard-Medium', sans-serif;
             font-size: 24px;
             font-weight: 500;
             position: absolute;
-            left: 140px;
-            top: 43px;
-            width: 113px;
-            height: 25px;
+            left: 164px;
+            top: 44px;
         }
 
-        /* 도어벨 이미지 크기 조절 및 오른쪽으로 이동 */
-        #alarm {
-            width: 35px;
-            /* 원하는 크기로 설정 */
-            height: auto;
-            position: absolute;
-            right: 30px;
-            /* 오른쪽 여백 설정 */
-            top: 40px;
-            /* 원하는 위치에 맞게 위쪽 여백 설정 */
-        }
 
-        .line {
-            width: 349px;
-            height: 25px;
-            position: absolute;
-            left: calc(50% - 174.5px);
-            top: 80px;
-            overflow: visible;
-        }
+.Nline {
+    background: #ffffff;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.30);
+    border-width: 1px;
+    width: 403px;
+    height: 81px;
+    position: absolute;
+    left: -5px;
+    top: 773px;
+}
 
-        .modal {
+.home {
+    width: 47px;
+    height: 47px;
+    position: absolute;
+    left: 50px;
+    top: 789px;
+    overflow: visible;
+}
+
+.stat {
+    width: 8.9%;
+    height: 4.07%;
+    position: absolute;
+    right: 15.2%;
+    left: 75.9%;
+    bottom: 2.62%;
+    top: 93.31%;
+    overflow: visible;
+}
+
+.request {
+    width: 9.37%;
+    height: 4.28%;
+    position: absolute;
+    right: 45.34%;
+    left: 45.29%;
+    bottom: 2.53%;
+    top: 93.19%;
+    overflow: visible;
+}
+    
+    .modal {
             display: none;
             /* 팝업 기본 감춤 */
             position: fixed;
             z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
+            left: -200;
+            top: 10;
+            width: 200%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
         }
@@ -122,8 +150,7 @@
             text-align: center;
             color: #333;
         }
-
-        /* 그룹 이름 입력란 스타일 */
+              /* 그룹 이름 입력란 스타일 */
         #groupName {
             width: 100%;
             padding: 12px;
@@ -167,59 +194,31 @@
             margin-top: 15px;
             box-sizing: border-box;
         }
-
-        .group-container {
-            margin: 10px;
-            /* 그룹 간 여백 */
-            text-align: center;
-            /* 텍스트 중앙 정렬 */
-            flex: 0 0 calc(50% - 20px);
-            /* 두 개의 열로 설정, 여백 고려 */
-        }
-
-        .group-image {
-            width: 150px;
-            /* 이미지 너비 */
-            height: 150px;
-            /* 이미지 높이 */
-            object-fit: cover;
-            /* 이미지 비율 유지 */
-            border-radius: 8px;
-            /* 선택 사항: 모서리 둥글게 */
-        }
-
-        .group-label {
-            margin-top: 5px;
-            /* 이미지와 텍스트 간 여백 */
-            font-size: 16px;
-            /* 텍스트 크기 조정 */
-        }
-
-        #groupsContainer {
-            display: flex;
-            flex-wrap: wrap;
-            /* 줄바꿈 허용 */
-            justify-content: flex-start;
-            /* 왼쪽 정렬 */
-            margin-top: 100px;
-            /* 그룹 위쪽 여백 */
-        }
-    </style>
+</style>
 </head>
-
 <body>
     <div class="div">
-        <div class="groupoImg-1"></div>
-        <button class="addBtn" onclick="openModal()"> 그룹 추가 </button>
-        <div class="our-home"> OurHome </div>
-        <img src="img/doorball.png" id="alarm">
-        <svg class="line" width="349" height="2" viewBox="0 0 349 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 0H349V1.5625H0V0Z" fill="black" fill-opacity="0.3" />
+        <img src="img/return.png" class="returnBtn">
+        <div class="groupName"> 우리집 </div>
+        <svg class="line" width="349" height="25" viewBox="0 0 349 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
         </svg>
+        
+        <img src="img/plus.png" class="groupAdd" onclick="openModal()">
 
-        <!-- Container for dynamically created groups -->
-        <div id="groupsContainer"></div>
-    </div>
+        <div class="Nline"> </div>
+           
+   <div class="bottom-nav">
+            <a href="home.html">
+                <img src="img/home-nav.png" class="home">
+            </a>
+            <a href="request.html">
+                <img src="img/request-nav.png" class="request">
+            </a>
+            <a href="stat.html">
+                <img src="img/status-nav.png" class="stat">
+            </a>
+        </div>
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
@@ -233,16 +232,18 @@
             <button class="add-button" onclick="addGroup()">추가</button>
         </div>
     </div>
-
+</div>
+   
     <script>
-        function openModal() {
-            document.getElementById("myModal").style.display = "block";
-        }
+    function openModal() {
+        document.getElementById("myModal").style.display = "block";
+    }
 
-        function closeModal() {
-            document.getElementById("myModal").style.display = "none";
-        }
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+    }
 
+    
         function addGroup() {
             const groupName = document.getElementById("groupName").value;
             const fileInput = document.getElementById("groupImageInput");
@@ -277,7 +278,10 @@
             document.getElementById("groupName").value = '';
             fileInput.value = '';
         }
+
+    //  addZone(){
+
+    //  }
     </script>
 </body>
-
 </html>
