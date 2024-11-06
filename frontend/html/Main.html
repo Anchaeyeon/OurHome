@@ -213,11 +213,11 @@
         <button class="addBtn" onclick="openModal()"> 그룹 추가 </button>
         <div class="our-home"> OurHome </div>
         <img src="img/doorball.png" id="alarm">
+        
         <svg class="line" width="349" height="2" viewBox="0 0 349 2" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 0H349V1.5625H0V0Z" fill="black" fill-opacity="0.3" />
         </svg>
 
-        <!-- Container for dynamically created groups -->
         <div id="groupsContainer"></div>
     </div>
 
@@ -234,51 +234,50 @@
         </div>
     </div>
 
-    <script>
-        function openModal() {
-            document.getElementById("myModal").style.display = "block";
+  <script>
+    function openModal() {
+        document.getElementById("myModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+    }
+
+    function addGroup() {
+        const groupName = document.getElementById("groupName").value;
+        const fileInput = document.getElementById("groupImageInput");
+
+        //그룹이름이나 사진이 없는 경우
+        if (groupName.trim() === '' || fileInput.files.length === 0) {
+            alert("그룹 이름과 사진을 모두 입력해주세요."); // Alert if either is missing
+            return;
         }
 
-        function closeModal() {
-            document.getElementById("myModal").style.display = "none";
-        }
+        const groupDiv = document.createElement("div");
+        groupDiv.className = "group-container";
 
-        function addGroup() {  //그룹생성함수
-            const groupName = document.getElementById("groupName").value; //입력받은 그룹 이름,사진 가져오기
-            const fileInput = document.getElementById("groupImageInput"); 
+        const groupLabel = document.createElement("div");
+        groupLabel.className = "group-label";
+        groupLabel.innerText = groupName;
 
-            //그룹이름이나 사진이 없는 경우
-            if (groupName.trim() === '' || fileInput.files.length === 0) {
-                alert("그룹 이름과 사진을 모두 입력해주세요."); 
-                return;
-            }
+        const groupImage = document.createElement("img");
+        groupImage.className = "group-image";
 
-            const groupDiv = document.createElement("div");
-            groupDiv.className = "group-container";
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            groupImage.src = e.target.result; // Set the src to the uploaded image
+            groupDiv.appendChild(groupImage); // Append the image to the group container
+            groupDiv.appendChild(groupLabel); // Append the label to the group container
+            document.getElementById("groupsContainer").appendChild(groupDiv); // Append to the main container
+        };
+        reader.readAsDataURL(fileInput.files[0]); // Read the image file
 
-            const groupLabel = document.createElement("div");
-            groupLabel.className = "group-label";
-            groupLabel.innerText = groupName;
-
-            const groupImage = document.createElement("img");
-            groupImage.className = "group-image";
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                groupImage.src = e.target.result; // Set the src to the uploaded image
-                groupDiv.appendChild(groupImage); // Append the image to the group container
-                groupDiv.appendChild(groupLabel); // Append the label to the group container
-                document.getElementById("groupsContainer").appendChild(groupDiv); // Append to the main container
-            };
-            reader.readAsDataURL(fileInput.files[0]); // Read the image file
-
-            closeModal(); // Close the modal after adding the group
-
-            // Reset the input fields
-            document.getElementById("groupName").value = '';
-            fileInput.value = '';
-        }
-    </script>
+        //  closeModal()을 호출해 모달을 닫고, 입력 필드를 빈 값으로 설정하여 사용자가 새로운 입력을 할 수 있도록 준비
+        closeModal();
+        document.getElementById("groupName").value = '';
+        fileInput.value = '';
+    }
+</script>
 </body>
 
 </html>
