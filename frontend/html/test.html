@@ -49,34 +49,33 @@
             overflow: visible;
         }
 
-        /* 알람 이미지 위치 및 크기 */
-        #alarm {
-            width: 35px;
-            height: auto;
-            position: absolute;
-            right: 30px;
-            top: 40px;
-        }
+         /* 알람 이미지 위치 및 크기 */
+    #alarm {
+        width: 35px;
+        height: auto;
+        position: absolute;
+        right: 30px;
+        top: 40px;
+    }
 
-        .groupeAddBtn {
-            color: #ffffff;
-            background-color: #1c98ed;
-            border: none;
-            text-align: center;
-            font-family: 'Pretendard-SemiBold', sans-serif;
-            font-size: 24px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 25px;
-            width: 318px;
-            height: 65px;
-            position: absolute;
-            left: 37px;
-            top: 760px;
-        }
-
-        /*그룹 생성*/
-        .modal {
+      .groupeAddBtn {
+        color: #ffffff;
+        background-color: #1c98ed;
+        border: none;
+        text-align: center;
+        font-family: 'Pretendard-SemiBold', sans-serif;
+        font-size: 24px;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 25px;
+        width: 318px;
+        height: 65px;
+        position: absolute;
+        left: 37px;
+        top: 760px;
+    }
+    /*그룹 생성*/
+     .modal {
             display: none;
             /* 팝업 기본 감춤 */
             position: fixed;
@@ -114,8 +113,7 @@
             text-align: center;
             color: #333;
         }
-
-        /* 그룹 이름 입력란 스타일 */
+              /* 그룹 이름 입력란 스타일 */
         #groupName {
             width: 100%;
             padding: 12px;
@@ -160,43 +158,43 @@
             box-sizing: border-box;
         }
 
-        /*생성된 그룹*/
-        .group-container {
-            margin: 10px;
-            text-align: center;
-            flex: 0 0 calc(50% - 20px);
-        }
+/*생성된 그룹*/
+    .group-container {
+        margin: 10px;
+        text-align: center;
+        flex: 0 0 calc(50% - 20px);
+    }
 
-        .group-image {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
+    .group-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
 
-        .group-label {
-            margin-top: 5px;
-            font-size: 16px;
-        }
+    .group-label {
+        margin-top: 5px;
+        font-size: 16px;
+    }
 
-        #groupsContainer {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            margin-top: 100px;
-        }
+    #groupsContainer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin-top: 100px;
+    }
     </style>
 </head>
 
 <body>
     <div class="div">
-        <div class="our-home"> OurHome </div>
+         <div class="our-home"> OurHome </div>
         <svg class="line" width="349" height="25" viewBox="0 0 349 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
         </svg>
         <img src="img/doorball.png" id="alarm">
         <button class="groupeAddBtn" onclick="openModal()"> 그룹 추가</button>
-        <div id="groupsContainer" onclick="openGroup()"></div> <!--생성된 그룹--->
+        <div id="groupsContainer" onclick="openGroup()"></div> <!--생성된 그룹--->>
 
         <!-- The Modal -->
         <div id="myModal" class="modal">
@@ -257,9 +255,9 @@
             fileInput.value = '';
         }
 
-        function openGroup() {
-            window.location.href = "home.html"
-        }
+         function openGroup() {
+                window.location.href = "home.html"
+            }
     </script>
 </body>
 

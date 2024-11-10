@@ -44,7 +44,73 @@
             top: 680px;
             overflow: visible;
         }
+    .modal {
+            display: none;
+            /* 팝업 기본 감춤 */
+            position: fixed;
+            z-index: 1;
+            left: -395;
+            top: 10;
+            width: 300%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
 
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 30%;
+            max-width: 400px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            float: right;
+            width: 35px;
+            /* 버튼 이미지 크기 */
+            height: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 제목 스타일 */
+        .modal-content h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #333;
+        }
+              /* 그룹 이름 입력란 스타일 */
+        #zoneName {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            /* 둥근 모서리 */
+            box-sizing: border-box;
+        }
+
+        /* 추가 버튼 스타일 */
+        .add-button {
+            display: block;
+            width: 50%;
+            padding: 12px;
+            background-color: #1C98ED;
+            color: white;
+            font-size: 1em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 15px auto 0;
+            /* 중앙 정렬 */
+            margin-top: 15px;
+            box-sizing: border-box;
+        }
         .returnBtn {
             width: 2.54%;
             height: 2.35%;
@@ -112,102 +178,75 @@
     overflow: visible;
 }
     
-    .modal {
-            display: none;
-            /* 팝업 기본 감춤 */
-            position: fixed;
-            z-index: 1;
-            left: -200;
-            top: 10;
-            width: 200%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 20px;
+  
+        #zoneName {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
             border-radius: 10px;
-            width: 30%;
-            max-width: 400px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border: 1px solid #ccc;
         }
 
-        .close {
-            float: right;
-            width: 35px;
-            /* 버튼 이미지 크기 */
-            height: 35px;
+
+        /* 구역 리스트 컨테이너 */
+        #zonesContainer {
+            display: flex;
+            flex-wrap: wrap;
+            
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        /* 구역 컨테이너 스타일 */
+        .zone-container {
+            width: 180px;
+            height: 250px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .zone-title {
+            font-size: 24px;
             font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* 제목 스타일 */
-        .modal-content h2 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            text-align: center;
             color: #333;
-        }
-              /* 그룹 이름 입력란 스타일 */
-        #groupName {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background-color: #BFE4F9;
-            /* 하늘색 배경 */
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            /* 둥근 모서리 */
-            box-sizing: border-box;
+            text-align: center;
         }
 
-        /* 파일 업로드 버튼 스타일 */
-        .file-upload {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            background-color: #BFE4F9;
-            /* 하늘색 배경 */
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            /* 둥근 모서리 */
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-
-        /* 추가 버튼 스타일 */
-        .add-button {
-            display: block;
-            width: 50%;
-            padding: 12px;
+        .task-button {
+            width: 80%;
+            padding: 10px;
             background-color: #1C98ED;
             color: white;
-            font-size: 1em;
             border: none;
-            border-radius: 15px;
+            border-radius: 10px;
             cursor: pointer;
-            margin: 15px auto 0;
-            /* 중앙 정렬 */
-            margin-top: 15px;
-            box-sizing: border-box;
+            text-align: center;
         }
 </style>
 </head>
 <body>
     <div class="div">
-        <img src="img/return.png" class="returnBtn">
+        <img src="img/return.png" class="returnBtn" onclick="goMain()">
         <div class="groupName"> 우리집 </div>
         <svg class="line" width="349" height="25" viewBox="0 0 349 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
         </svg>
         
-        <img src="img/plus.png" class="groupAdd" onclick="openModal()">
+        <img src="img/plus.png" class="groupAdd" onclick="openZoneModal()">
+        
+        <div id="zonesContainer"></div> <!--생성된 구역--->
 
+ <!--하단바--->
         <div class="Nline"> </div>
-           
    <div class="bottom-nav">
             <a href="home.html">
                 <img src="img/home-nav.png" class="home">
@@ -221,67 +260,60 @@
         </div>
 
     <!-- The Modal -->
-    <div id="myModal" class="modal">
+    <div id="ZoneModal" class="modal">
         <div class="modal-content">
-            <img src="img/xBtn.png" class="close" onclick="closeModal()" alt="닫기 버튼">
-            <h2>그룹 추가</h2>
-            <p>그룹 이름</p>
-            <input type="text" placeholder="그룹 이름" id="groupName">
-            <p>그룹 사진 추가</p>
-            <input type="file" class="file-upload" accept="image/*" id="groupImageInput">
-            <button class="add-button" onclick="addGroup()">추가</button>
+            <img src="img/xBtn.png" class="close" onclick="closeZoneModal()" alt="닫기 버튼">
+            <h2>구역 추가</h2>
+            <p>집안일을 추가할 구역</p>
+            <input type="text" placeholder="구역 이름" id="zoneName">
+            <button class="add-button" onclick="addZone()">추가</button>
         </div>
     </div>
 </div>
    
     <script>
-    function openModal() {
-        document.getElementById("myModal").style.display = "block";
-    }
+      function openZoneModal() {
+            document.getElementById("ZoneModal").style.display = "block";
+        }
 
-    function closeModal() {
-        document.getElementById("myModal").style.display = "none";
-    }
+        function closeZoneModal() {
+            document.getElementById("ZoneModal").style.display = "none";
+        }
 
-    
-        function addGroup() {
-            const groupName = document.getElementById("groupName").value;
-            const fileInput = document.getElementById("groupImageInput");
+        function addZone() {
+            const zoneName = document.getElementById("zoneName").value.trim();
 
-            //그룹이름이나 사진이 없는 경우
-            if (groupName.trim() === '' || fileInput.files.length === 0) {
-                alert("그룹 이름과 사진을 모두 입력해주세요."); // Alert if either is missing
+            if (zoneName === '') {
+                alert("구역 이름을 입력해주세요.");
                 return;
             }
 
-            const groupDiv = document.createElement("div");
-            groupDiv.className = "group-container";
+            const zoneDiv = document.createElement("div");
+            zoneDiv.className = "zone-container";
 
-            const groupLabel = document.createElement("div");
-            groupLabel.className = "group-label";
-            groupLabel.innerText = groupName;
+            // 구역 이름 표시
+            const zoneTitle = document.createElement("div");
+            zoneTitle.className = "zone-title";
+            zoneTitle.innerText = zoneName;
 
-            const groupImage = document.createElement("img");
-            groupImage.className = "group-image";
+            // 집안일 추가 버튼
+            const taskButton = document.createElement("button");
+            taskButton.className = "task-button";
+            taskButton.innerText = "집안일 추가";
+            taskButton.onclick = () => alert(`${zoneName}에 집안일을 추가하세요.`);
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                groupImage.src = e.target.result; // Set the src to the uploaded image
-                groupDiv.appendChild(groupImage); // Append the image to the group container
-                groupDiv.appendChild(groupLabel); // Append the label to the group container
-                document.getElementById("groupsContainer").appendChild(groupDiv); // Append to the main container
-            };
-            reader.readAsDataURL(fileInput.files[0]); // Read the image file
+            // 구역 컨테이너에 요소 추가
+            zoneDiv.appendChild(zoneTitle);
+            zoneDiv.appendChild(taskButton);
+            zonesContainer.appendChild(zoneDiv);
 
-            //  closeModal()을 호출해 모달을 닫고, 입력 필드를 빈 값으로 설정하여 사용자가 새로운 입력을 할 수 있도록 준비
-            closeModal();
-            document.getElementById("groupName").value = '';
-            fileInput.value = '';
+            closeZoneModal();
+            document.getElementById("zoneName").value = '';
         }
 
-    //  addZone(){
-
-    //  }
+        function goMain() {
+            window.location.href = "Main.html";
+        }
     </script>
 </body>
 </html>
