@@ -189,16 +189,18 @@
     overflow: visible;
 } 
         /* 구역 리스트 컨테이너 */
-        #zonesContainer {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            margin-top: 100px;
-             gap: 10px;
-            padding: 10px;
-            overflow-y: auto; /* 스크롤 추가 */
+    /* 구역 리스트 컨테이너 */
+#zonesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 100px;
+    gap: 10px;
+    padding: 10px;
+    overflow-y: auto; /* 스크롤 추가 */
+    height: 550px; /* 높이 조정 */
+}
 
-        }
 
         /* 구역 컨테이너 스타일 */
         .zone-container {
@@ -238,16 +240,18 @@
     list-style-type: none;
     padding: 0;
     margin-top: 10px;
-    width: 100%;
-    overflow-y: auto; /* 스크롤 추가 */
+   overflow-y: auto; /* 스크롤 추가 */
+   max-height: 300px; /* 높이 조정 */
+   max-width: 200px;
 }
-
+      /* 각 집안일란 스타일 */
 .task-item {
     padding: 8px;
-    margin: 5px 0;
-    background-color: #f0f0f0;
+    margin: 10px 0;
     border-radius: 10px;
+     background-color: #f0f0f0;
     font-size: 16px;
+    width: 150px;
     color: #333;
 }
 
@@ -279,6 +283,7 @@
             </a>
         </div>
 
+    <!-- 집안일추가-->
     <div id="taskModal" class="modal">
         <div class="modal-content">
             <img src="img/xBtn.png" class="close" onclick="closeTask()" alt="닫기 버튼">
@@ -286,12 +291,12 @@
             <p>완료해야 할 집안일</p>
             <input type="text" id="taskName">
             <p>보상</p>
-            <input type="number" name="number_select" min="1" max="10" value="1">
+            <input type="number" id="taskReward" name="number_select" min="1" max="10" value="1">
             <button class="add-button" onclick="addTask()">추가</button>
         </div>
     </div>
 
-    <!-- The Modal -->
+    <!-- 구역추가-->
     <div id="ZoneModal" class="modal">
         <div class="modal-content">
             <img src="img/xBtn.png" class="close" onclick="closeZoneModal()" alt="닫기 버튼">
@@ -301,8 +306,19 @@
             <button class="add-button" onclick="addZone()">추가</button>
         </div>
     </div>
+
+    <div id="checkTask" class="modal">
+        <div class="modal-content">
+            <img src="img/xBtn.png" class="close" onclick="closeCheckTask()" alt="닫기 버튼">
+            <h2>인증 사진 첨부</h2>
+            <input type="file" class="file-upload" accept="image/*" id="groupImageInput">
+            <button class="add-button" onclick="completeTask()">완료</button>
+        </div>
+    </div>
+
 </div>
-   
+
+
     <script>
     let currentZoneId = null;
 
@@ -359,38 +375,120 @@
     function openTask(zoneId) {
         currentZoneId = zoneId; // 현재 구역 ID 저장
         document.getElementById("taskModal").style.display = "block";
+
     }
+
+     // 집안일 추가 함수
+        function addTask() {
+            const taskName = document.getElementById("taskName").value.trim();
+            const taskReward = document.getElementById("taskReward").value;
+
+            if (taskName === '') {
+                alert("집안일을 입력해주세요.");
+                return;
+            }
+
+            if (taskReward === '' || taskReward <= 0) {
+                alert("유효한 보상 값을 입력해주세요.");
+                return;
+            }
+
+            const taskList = document.getElementById(`${currentZoneId}-tasks`);
+            const taskItem = document.createElement("li");
+            taskItem.className = "task-item";
+            taskItem.innerText = taskName;
+            taskItem.dataset.reward = taskReward; // 보상 값을 데이터 속성으로 저장
+
+            // 보상 표시 기능 추가
+            taskItem.onmouseover = () => {
+                taskItem.title = `보상: ⭐ ${taskReward}개`;
+            };
+
+            taskItem.onclick = () => checkTask(taskItem);
+            taskList.appendChild(taskItem);
+
+            closeTask();
+            document.getElementById("taskName").value = '';
+            document.getElementById("taskReward").value = '1';
+
+            taskItem.onclick = () => checkTask(taskItem);
+
+        }
 
     // 집안일 추가 팝업창 닫기
     function closeTask() {
         document.getElementById("taskModal").style.display = "none";
     }
 
-    // 집안일 추가 함수
-    function addTask() {
-        const taskName = document.getElementById("taskName").value.trim();
-
-        if (taskName === '') {
-            alert("집안일을 입력해주세요.");
-            return;
-        }
-
-        const taskList = document.getElementById(`${currentZoneId}-tasks`);
-        const taskItem = document.createElement("li");
-        taskItem.className = "task-item";
-        taskItem.innerText = taskName;
-
-        // 집안일 리스트에 추가
-        taskList.appendChild(taskItem);
-
-        closeTask();
-        document.getElementById("taskName").value = '';
+  // 집안일 완료 모달 열기
+    function checkTask(taskItem) {
+        currentTaskItem = taskItem; // 현재 선택된 집안일 요소 저장
+        document.getElementById("checkTask").style.display = "block";
     }
+
+   function completeTask() {
+        const taskName = currentTaskItem.innerText;
+        const taskReward = currentTaskItem.dataset.reward;
+        const zoneId = currentZoneId;
+        const zoneName = document.getElementById(zoneId).querySelector('.zone-title').innerText;
+        const imageInput = document.getElementById("groupImageInput");
+
+        if (imageInput.files.length > 0) {
+            const imageFile = imageInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const imageData = e.target.result;
+
+                const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
+                completedTasks.push({ zoneId, zoneName, taskName, imageData });
+                localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
+
+                alert(`""${taskName}" 집안일이 완료되었습니다. 보상: ⭐ ${taskReward}개`);
+
+                currentTaskItem.remove();
+                closeCheckTask();
+            };
+
+            reader.readAsDataURL(imageFile);
+        } else {
+            alert("이미지를 첨부하세요");
+        }
+    }
+
+     function closeCheckTask() {
+            document.getElementById("checkTask").style.display = "none";
+        }
 
     // 메인 화면으로 이동
     function goMain() {
         window.location.href = "Main.html";
     }
+
+   // localStorage 사용량 확인 및 초기화
+    function checkStorageUsage() {
+        let usedBytes = 0;
+
+        for (let key in localStorage) {
+            if (localStorage.hasOwnProperty(key)) {
+                usedBytes += localStorage.getItem(key).length * 2; // 문자열의 길이 (UTF-16 기준)
+            }
+        }
+
+        const usedKB = (usedBytes / 1024).toFixed(2); // 사용량 (KB)
+        const maxStorageKB = 5120; // localStorage 최대 용량 (KB)
+        const remainingKB = (maxStorageKB - usedKB).toFixed(2); // 남은 용량 (KB)
+
+        console.log(`localStorage 사용량: ${usedKB} KB / ${maxStorageKB} KB`);
+        console.log(`남은 용량: ${remainingKB} KB`);
+
+        // 남은 용량이 500KB 이하이면 자동 초기화
+        if (remainingKB <= 500) {
+            localStorage.clear();
+            console.log("localStorage가 초기화되었습니다.");
+        }
+    }
+
 
     </script>
 </body>
