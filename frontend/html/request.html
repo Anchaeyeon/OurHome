@@ -3,6 +3,13 @@
 <head>
     <title></title>
     <style>
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -42,9 +49,9 @@
         .toRequest {
             color: #ffffff;
             text-align: center;
-            font-family: 'Pretendard-SemiBold', sans-serif;
+            font-family: 'Pretendard-Regular';
             font-size: 20px;
-            font-weight: 600;
+            font-weight: 500;
             position: absolute;
             left: 25px;
             top: 15px;
@@ -62,9 +69,9 @@
         .getRequest {
             color: #ffffff;
             text-align: center;
-            font-family: 'Pretendard-SemiBold', sans-serif;
+            font-family: 'Pretendard-Regular';
             font-size: 20px;
-            font-weight: 600;
+            font-weight: 500;
             position: absolute;
             left: 205px;
             top: 15px;
@@ -76,6 +83,121 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+        }
+
+        .div {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+        column-gap: 25px;
+        padding-top: 24px;
+        }
+
+        .toRequest:hover {
+            background-color: #1C98ED;
+        }
+
+        .toRequest:active {
+            background-color: #1C98ED;
+        }
+
+        .toRequest {
+            font-family: 'Pretendard-Regular';
+            font-weight: 500;
+            background-color: #BFE4F9;
+            border-radius: 10px;
+            width: 150px;
+            height: 50px;
+            border: none;
+            color: white;
+            font-size: 17px;
+        }
+
+        .getRequest:hover {
+            background-color: #1C98ED;
+        }
+
+        .getRequest:active {
+            background-color: #1C98ED;
+        }
+
+        .getRequest {
+            font-family: 'Pretendard-Regular';
+            font-weight: 500;
+            background-color: #BFE4F9;
+            border-radius: 10px;
+            width: 150px;
+            height: 50px;
+            border: none;
+            color: white;
+            font-size: 17px;
+        }
+
+        .box {
+            width: 311px;
+            height: 215px;
+            background-image: linear-gradient(to bottom, #BFE4F9 70%, white 30%);
+            border-radius: 20px;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            margin: 24px auto;
+        }
+
+        .txt-request {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            color: rgba(0, 0, 0, 0.90);
+            font-family: 'Pretendard-Regular';
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            padding-top: 25px;
+        }
+
+        .deadline {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            color: rgba(0, 0, 0, 0.90);
+            font-family: 'Pretendard-Regular';
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            padding-top: 10px;
+        }
+
+        .btn-container {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: center;
+            column-gap: 25px;
+        }
+
+        .btn-OX {
+            font-family: 'Pretendard-Regular';
+            font-weight: 500;
+            background-color: #BFE4F9;
+            border-radius: 20px;
+            width: 116px;
+            height: 45px;
+            border: none;
+            color: white;
+            font-size: 17px;
+            margin-top: 60px;
+        }
+
+        .btn-OX:hover {
+            background-color: #1C98ED;
+        }
+
+        .btn-OX:active {
+            background-color: #1C98ED;
         }
 
         .Nline {
@@ -160,6 +282,14 @@
         <div id="receivedContent" class="content">
             <h2>받은 요청 화면</h2>
             <p>여기에 받은 요청 내용을 표시하세요.</p>
+            <div class="box">
+                <div class="txt-request">엄마님이 숙제를 요청하셨습니다.</div><br>
+                <div class="deadline">기한 : 00까지</div>
+                <div class="btn-container">
+                    <button class="btn-OX">수락</button>
+                    <button class="btn-OX">거절</button>
+                </div>
+            </div>
         </div>
 
         <!-- 하단 네비게이션 -->
