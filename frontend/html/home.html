@@ -2,7 +2,14 @@
 <head>
     <title></title>
     <style>
- * {
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -27,6 +34,7 @@
             transform-origin: top center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
        .line {
             width: 349px;
             height: 25px;
@@ -44,7 +52,8 @@
             top: 680px;
             overflow: visible;
         }
-    .modal {
+
+        .modal {
             display: none;
             /* 팝업 기본 감춤 */
             position: fixed;
@@ -82,7 +91,8 @@
             text-align: center;
             color: #333;
         }
-              /* 그룹 이름 입력란 스타일 */
+
+        /* 그룹 이름 입력란 스타일 */
         #zoneName {
             width: 100%;
             padding: 12px;
@@ -111,6 +121,7 @@
             margin-top: 15px;
             box-sizing: border-box;
         }
+
         .returnBtn {
             width: 2.54%;
             height: 2.35%;
@@ -126,13 +137,14 @@
         .groupName {
             color: #000000;
             text-align: left;
-            font-family: 'Pretendard-Medium', sans-serif;
+            font-family: 'Pretendard-Regular';
             font-size: 24px;
             font-weight: 500;
             position: absolute;
             left: 164px;
             top: 44px;
         }
+
         /* 집안일 입력란 스타일 */
         #taskName {
             width: 100%;
@@ -146,58 +158,58 @@
             box-sizing: border-box;
         }
 
-.Nline {
-    background: #ffffff;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0.30);
-    border-width: 1px;
-    width: 403px;
-    height: 81px;
-    position: absolute;
-    left: -5px;
-    top: 773px;
-}
+        .Nline {
+            background: #ffffff;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.30);
+            border-width: 1px;
+            width: 403px;
+            height: 81px;
+            position: absolute;
+            left: -5px;
+            top: 773px;
+        }
 
-.home {
-    width: 47px;
-    height: 47px;
-    position: absolute;
-    left: 50px;
-    top: 789px;
-    overflow: visible;
-}
+        .home {
+            width: 47px;
+            height: 47px;
+            position: absolute;
+            left: 50px;
+            top: 789px;
+            overflow: visible;
+        }
 
-.stat {
-    width: 8.9%;
-    height: 4.07%;
-    position: absolute;
-    right: 15.2%;
-    left: 75.9%;
-    bottom: 2.62%;
-    top: 93.31%;
-    overflow: visible;
-}
+        .stat {
+            width: 8.9%;
+            height: 4.07%;
+            position: absolute;
+            right: 15.2%;
+            left: 75.9%;
+            bottom: 2.62%;
+            top: 93.31%;
+            overflow: visible;
+        }
 
-.request {
-    width: 9.37%;
-    height: 4.28%;
-    position: absolute;
-    right: 45.34%;
-    left: 45.29%;
-    bottom: 2.53%;
-    top: 93.19%;
-    overflow: visible;
-} 
+        .request {
+            width: 9.37%;
+            height: 4.28%;
+            position: absolute;
+            right: 45.34%;
+            left: 45.29%;
+            bottom: 2.53%;
+            top: 93.19%;
+            overflow: visible;
+        }
+
         /* 구역 리스트 컨테이너 */
         #zonesContainer {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start;
             margin-top: 100px;
-             gap: 10px;
+            gap: 10px;
             padding: 10px;
             overflow-y: auto; /* 스크롤 추가 */
-
         }
 
         /* 구역 컨테이너 스타일 */
@@ -233,25 +245,34 @@
             cursor: pointer;
             text-align: center;
         }
+        
         /* 집안일 리스트 스타일 */
-.task-list {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 10px;
-    width: 100%;
-    overflow-y: auto; /* 스크롤 추가 */
-}
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+            width: 100%;
+            overflow-y: auto; /* 스크롤 추가 */
+        }
 
-.task-item {
-    padding: 8px;
-    margin: 5px 0;
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    font-size: 16px;
-    color: #333;
-}
+        .task-item {
+            padding: 8px;
+            margin: 5px 0;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #333;
+        }
 
-</style>
+        h2 {
+            font-family: 'Pretendard-Regular';
+        }
+
+        p {
+            font-family: 'Pretendard-Regular';
+            font-size: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="div">
