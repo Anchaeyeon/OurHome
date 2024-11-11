@@ -1,5 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <style>
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .div {
+            background: #ffffff;
+            width: 393px;
+            height: 850px;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.8);
+            transform-origin: top center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        p {
+            font-family: 'Pretendard-Regular';
+            font-size: 24px;
+            font-weight: 500;
+            padding-top: 65%;
+        }
+
+        .btn-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            row-gap: 10px;
+        }
+
+        .login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Pretendard-Regular';
+            gap: 10px;
+            /* 아이콘과 텍스트 간 간격 */
+            width: 286px;
+            height: 53px;
+            border-radius: 20px;
+            border: 1px solid #000;
+            background: #FFF;
+        }
+
+        .login-btn:active {
+            border-radius: 20px;
+            width: 286px;
+            height: 53px;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 1px 2px rgba(107, 107, 107, 0.5);
+        }
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="div">
+    <div class="login">
+        <p>login</p>
+    </div>
+    <div class="btn-content">
+        <button class="login-btn">
+            <img src="/frontend/html/img/google.png" alt="">
+            ⠀ 구글로 로그인 하기
+        </button>
+        <button class="login-btn">
+            <img src="/frontend/html/img/naver.png" alt="">
+            네이버로 로그인 하기
+        </button>
+        <button class="login-btn">
+            <img src="/frontend/html/img/kakao.png" alt="">
+            kakao로 로그인 하기
+        </button>
+    </div>
+    </div>
+</body>
+
+</html>
+
     <head>
         <meta charset="UTF-8">
         <title>login</title>
