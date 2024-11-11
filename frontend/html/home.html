@@ -36,7 +36,7 @@
             overflow: visible;
         }
 
-        .groupAdd {
+        .zoneAdd {
             width: 60px;
             height: 60px;
             position: absolute;
@@ -44,7 +44,73 @@
             top: 680px;
             overflow: visible;
         }
+    .modal {
+            display: none;
+            /* 팝업 기본 감춤 */
+            position: fixed;
+            z-index: 1;
+            left: -395;
+            top: 10;
+            width: 300%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
 
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 30%;
+            max-width: 400px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            float: right;
+            width: 35px;
+            /* 버튼 이미지 크기 */
+            height: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 제목 스타일 */
+        .modal-content h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #333;
+        }
+              /* 그룹 이름 입력란 스타일 */
+        #zoneName {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            /* 둥근 모서리 */
+            box-sizing: border-box;
+        }
+
+        /* 추가 버튼 스타일 */
+        .add-button {
+            display: block;
+            width: 50%;
+            padding: 12px;
+            background-color: #1C98ED;
+            color: white;
+            font-size: 1em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 15px auto 0;
+            /* 중앙 정렬 */
+            margin-top: 15px;
+            box-sizing: border-box;
+        }
         .returnBtn {
             width: 2.54%;
             height: 2.35%;
@@ -67,7 +133,18 @@
             left: 164px;
             top: 44px;
         }
-
+        /* 집안일 입력란 스타일 */
+        #taskName {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            /* 둥근 모서리 */
+            box-sizing: border-box;
+        }
 
 .Nline {
     background: #ffffff;
@@ -110,104 +187,86 @@
     bottom: 2.53%;
     top: 93.19%;
     overflow: visible;
-}
-    
-    .modal {
-            display: none;
-            /* 팝업 기본 감춤 */
-            position: fixed;
-            z-index: 1;
-            left: -200;
-            top: 10;
-            width: 200%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+} 
+        /* 구역 리스트 컨테이너 */
+        #zonesContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin-top: 100px;
+             gap: 10px;
+            padding: 10px;
+            overflow-y: auto; /* 스크롤 추가 */
+
         }
 
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 10px;
-            width: 30%;
-            max-width: 400px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        /* 구역 컨테이너 스타일 */
+        .zone-container {
+            width: 180px;
+            height: 250px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
         }
 
-        .close {
-            float: right;
-            width: 35px;
-            /* 버튼 이미지 크기 */
-            height: 35px;
+        .zone-title {
+            font-size: 24px;
             font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* 제목 스타일 */
-        .modal-content h2 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            text-align: center;
             color: #333;
-        }
-              /* 그룹 이름 입력란 스타일 */
-        #groupName {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background-color: #BFE4F9;
-            /* 하늘색 배경 */
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            /* 둥근 모서리 */
-            box-sizing: border-box;
+            text-align: center;
         }
 
-        /* 파일 업로드 버튼 스타일 */
-        .file-upload {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            background-color: #BFE4F9;
-            /* 하늘색 배경 */
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            /* 둥근 모서리 */
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-
-        /* 추가 버튼 스타일 */
-        .add-button {
-            display: block;
-            width: 50%;
-            padding: 12px;
+        .task-button {
+            width: 80%;
+            padding: 10px;
             background-color: #1C98ED;
             color: white;
-            font-size: 1em;
             border: none;
-            border-radius: 15px;
+            border-radius: 10px;
             cursor: pointer;
-            margin: 15px auto 0;
-            /* 중앙 정렬 */
-            margin-top: 15px;
-            box-sizing: border-box;
+            text-align: center;
         }
+        /* 집안일 리스트 스타일 */
+.task-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+    width: 100%;
+    overflow-y: auto; /* 스크롤 추가 */
+}
+
+.task-item {
+    padding: 8px;
+    margin: 5px 0;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
 </style>
 </head>
 <body>
     <div class="div">
-        <img src="img/return.png" class="returnBtn">
+        <img src="img/return.png" class="returnBtn" onclick="goMain()">
         <div class="groupName"> 우리집 </div>
         <svg class="line" width="349" height="25" viewBox="0 0 349 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
         </svg>
         
-        <img src="img/plus.png" class="groupAdd" onclick="openModal()">
+        <img src="img/plus.png" class="zoneAdd" onclick="openZoneModal()">
+        
+        <div id="zonesContainer"></div> <!--생성된 구역--->
 
+ <!--하단바--->
         <div class="Nline"> </div>
-           
    <div class="bottom-nav">
             <a href="home.html">
                 <img src="img/home-nav.png" class="home">
@@ -220,68 +279,119 @@
             </a>
         </div>
 
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
+    <div id="taskModal" class="modal">
         <div class="modal-content">
-            <img src="img/xBtn.png" class="close" onclick="closeModal()" alt="닫기 버튼">
-            <h2>그룹 추가</h2>
-            <p>그룹 이름</p>
-            <input type="text" placeholder="그룹 이름" id="groupName">
-            <p>그룹 사진 추가</p>
-            <input type="file" class="file-upload" accept="image/*" id="groupImageInput">
-            <button class="add-button" onclick="addGroup()">추가</button>
+            <img src="img/xBtn.png" class="close" onclick="closeTask()" alt="닫기 버튼">
+            <h2>집안일 추가</h2>
+            <p>완료해야 할 집안일</p>
+            <input type="text" id="taskName">
+            <p>보상</p>
+            <input type="number" name="number_select" min="1" max="10" value="1">
+            <button class="add-button" onclick="addTask()">추가</button>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="ZoneModal" class="modal">
+        <div class="modal-content">
+            <img src="img/xBtn.png" class="close" onclick="closeZoneModal()" alt="닫기 버튼">
+            <h2>구역 추가</h2>
+            <p>집안일을 추가할 구역</p>
+            <input type="text" placeholder="구역 이름" id="zoneName">
+            <button class="add-button" onclick="addZone()">추가</button>
         </div>
     </div>
 </div>
    
     <script>
-    function openModal() {
-        document.getElementById("myModal").style.display = "block";
+    let currentZoneId = null;
+
+    function openZoneModal() {
+        document.getElementById("ZoneModal").style.display = "block";
     }
 
-    function closeModal() {
-        document.getElementById("myModal").style.display = "none";
+    function closeZoneModal() {
+        document.getElementById("ZoneModal").style.display = "none";
     }
 
-    
-        function addGroup() {
-            const groupName = document.getElementById("groupName").value;
-            const fileInput = document.getElementById("groupImageInput");
+    // 구역 추가 함수
+    function addZone() {
+        const zoneName = document.getElementById("zoneName").value.trim();
 
-            //그룹이름이나 사진이 없는 경우
-            if (groupName.trim() === '' || fileInput.files.length === 0) {
-                alert("그룹 이름과 사진을 모두 입력해주세요."); // Alert if either is missing
-                return;
-            }
-
-            const groupDiv = document.createElement("div");
-            groupDiv.className = "group-container";
-
-            const groupLabel = document.createElement("div");
-            groupLabel.className = "group-label";
-            groupLabel.innerText = groupName;
-
-            const groupImage = document.createElement("img");
-            groupImage.className = "group-image";
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                groupImage.src = e.target.result; // Set the src to the uploaded image
-                groupDiv.appendChild(groupImage); // Append the image to the group container
-                groupDiv.appendChild(groupLabel); // Append the label to the group container
-                document.getElementById("groupsContainer").appendChild(groupDiv); // Append to the main container
-            };
-            reader.readAsDataURL(fileInput.files[0]); // Read the image file
-
-            //  closeModal()을 호출해 모달을 닫고, 입력 필드를 빈 값으로 설정하여 사용자가 새로운 입력을 할 수 있도록 준비
-            closeModal();
-            document.getElementById("groupName").value = '';
-            fileInput.value = '';
+        if (zoneName === '') {
+            alert("구역 이름을 입력해주세요.");
+            return;
         }
 
-    //  addZone(){
+        const zoneId = `zone-${Date.now()}`; // 고유한 구역 ID 생성
 
-    //  }
+        const zoneDiv = document.createElement("div");
+        zoneDiv.className = "zone-container";
+        zoneDiv.id = zoneId;
+
+        // 구역 이름 표시
+        const zoneTitle = document.createElement("div");
+        zoneTitle.className = "zone-title";
+        zoneTitle.innerText = zoneName;
+
+        // 집안일 리스트
+        const taskList = document.createElement("ul");
+        taskList.className = "task-list";
+        taskList.id = `${zoneId}-tasks`;
+
+        // 집안일 추가 버튼
+        const taskButton = document.createElement("button");
+        taskButton.className = "task-button";
+        taskButton.innerText = "집안일 추가";
+        taskButton.onclick = () => openTask(zoneId);
+
+        // 구역 컨테이너에 요소 추가
+        zoneDiv.appendChild(zoneTitle);
+        zoneDiv.appendChild(taskList);
+        zoneDiv.appendChild(taskButton);
+        document.getElementById("zonesContainer").appendChild(zoneDiv);
+
+        closeZoneModal();
+        document.getElementById("zoneName").value = '';
+    }
+
+    // 집안일 추가 팝업창 열기
+    function openTask(zoneId) {
+        currentZoneId = zoneId; // 현재 구역 ID 저장
+        document.getElementById("taskModal").style.display = "block";
+    }
+
+    // 집안일 추가 팝업창 닫기
+    function closeTask() {
+        document.getElementById("taskModal").style.display = "none";
+    }
+
+    // 집안일 추가 함수
+    function addTask() {
+        const taskName = document.getElementById("taskName").value.trim();
+
+        if (taskName === '') {
+            alert("집안일을 입력해주세요.");
+            return;
+        }
+
+        const taskList = document.getElementById(`${currentZoneId}-tasks`);
+        const taskItem = document.createElement("li");
+        taskItem.className = "task-item";
+        taskItem.innerText = taskName;
+
+        // 집안일 리스트에 추가
+        taskList.appendChild(taskItem);
+
+        closeTask();
+        document.getElementById("taskName").value = '';
+    }
+
+    // 메인 화면으로 이동
+    function goMain() {
+        window.location.href = "Main.html";
+    }
+
     </script>
 </body>
 </html>

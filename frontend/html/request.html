@@ -1,8 +1,9 @@
 <html>
+
 <head>
     <title></title>
     <style>
- * {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -27,7 +28,8 @@
             transform-origin: top center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-       .line {
+
+        .line {
             width: 349px;
             height: 25px;
             position: absolute;
@@ -36,108 +38,156 @@
             overflow: visible;
         }
 
-        .groupAdd {
-            width: 60px;
-            height: 60px;
+        /* 요청하기 버튼 */
+        .toRequest {
+            color: #ffffff;
+            text-align: center;
+            font-family: 'Pretendard-SemiBold', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
             position: absolute;
-            left: 320px;
-            top: 650px;
+            left: 25px;
+            top: 15px;
+            background: #1c98ed;
+            border-radius: 10px;
+            width: 150px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* 요청받기 버튼 */
+        .getRequest {
+            color: #ffffff;
+            text-align: center;
+            font-family: 'Pretendard-SemiBold', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            position: absolute;
+            left: 205px;
+            top: 15px;
+            background: #1c98ed;
+            border-radius: 10px;
+            width: 150px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .Nline {
+            background: #ffffff;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.30);
+            border-width: 1px;
+            width: 403px;
+            height: 81px;
+            position: absolute;
+            left: -5px;
+            top: 773px;
+        }
+
+        .home {
+            width: 47px;
+            height: 47px;
+            position: absolute;
+            left: 50px;
+            top: 789px;
             overflow: visible;
         }
 
-        .returnBtn {
-            width: 2.54%;
-            height: 2.35%;
+        .stat {
+            width: 8.9%;
+            height: 4.07%;
             position: absolute;
-            right: 87.02%;
-            left: 10.43%;
-            bottom: 92.02%;
-            top: 5.63%;
-            transform: translate(-11.5px, -1.5px);
+            right: 15.2%;
+            left: 75.9%;
+            bottom: 2.62%;
+            top: 93.31%;
             overflow: visible;
         }
 
-        .groupName {
-            color: #000000;
-            text-align: left;
-            font-family: 'Pretendard-Medium', sans-serif;
-            font-size: 24px;
-            font-weight: 500;
+        .request {
+            width: 9.37%;
+            height: 4.28%;
             position: absolute;
-            left: 164px;
-            top: 44px;
+            right: 45.34%;
+            left: 45.29%;
+            bottom: 2.53%;
+            top: 93.19%;
+            overflow: visible;
         }
 
-
-.Nline {
-    background: #ffffff;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0.30);
-    border-width: 1px;
-    width: 403px;
-    height: 81px;
-    position: absolute;
-    left: -5px;
-    top: 773px;
-}
-
-.home {
-    width: 47px;
-    height: 47px;
-    position: absolute;
-    left: 50px;
-    top: 789px;
-    overflow: visible;
-}
-
-.stat {
-    width: 8.9%;
-    height: 4.07%;
-    position: absolute;
-    right: 15.2%;
-    left: 75.9%;
-    bottom: 2.62%;
-    top: 93.31%;
-    overflow: visible;
-}
-
-.request {
-    width: 9.37%;
-    height: 4.28%;
-    position: absolute;
-    right: 45.34%;
-    left: 45.29%;
-    bottom: 2.53%;
-    top: 93.19%;
-    overflow: visible;
-}
-     /* 새로 추가된 스타일 */
-        .page-content {
-            width:100%;
-            height:100%;
+        /* 화면 전환을 위한 스타일 */
+        .content {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 70px;
+            padding: 20px;
+            overflow-y: auto;
         }
-</style>
+
+        .active {
+            display: block;
+        }
+    </style>
 </head>
+
 <body>
     <div class="div">
-    
+        <!-- 버튼 영역 -->
+        <div class="toRequest" onclick="showContent('requestContent')"> 요청하기 </div>
+        <div class="getRequest" onclick="showContent('receivedContent')"> 요청받기 </div>
 
-        <div class="Nline"> </div>
-           
-<div class="bottom-nav">
-    <a href="home.html">
-        <img src="img/home-nav.png" class="home">
-    </a>
-    <a href="request.html">
-        <img src="img/request-nav.png" class="request">
-    </a>
-    <a href="stat.html">
-        <img src="img/status-nav.png" class="stat">
-    </a>
-</div>
-   
+        <svg class="line" width="349" height="25" viewBox="0 0 349 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
+        </svg>
+
+        <div class="Nline"></div>
+
+        <!-- 요청하기 화면 -->
+        <div id="requestContent" class="content active">
+            <h2>요청하기 화면</h2>
+            <p>여기에 요청하기 내용을 입력하세요.</p>
+        </div>
+
+        <!-- 받은 요청 화면 -->
+        <div id="receivedContent" class="content">
+            <h2>받은 요청 화면</h2>
+            <p>여기에 받은 요청 내용을 표시하세요.</p>
+        </div>
+
+        <!-- 하단 네비게이션 -->
+        <div class="bottom-nav">
+            <a href="home.html">
+                <img src="img/home-nav.png" class="home">
+            </a>
+            <a href="request.html">
+                <img src="img/request-nav.png" class="request">
+            </a>
+            <a href="stat.html">
+                <img src="img/status-nav.png" class="stat">
+            </a>
+        </div>
+    </div>
+
     <script>
+        // 화면 전환 함수
+        function showContent(contentId) {
+            // 모든 콘텐츠 숨기기
+            document.querySelectorAll('.content').forEach((content) => {
+                content.classList.remove('active');
+            });
 
+            // 클릭한 버튼에 해당하는 콘텐츠만 표시
+            document.getElementById(contentId).classList.add('active');
+        }
     </script>
 </body>
+
 </html>
