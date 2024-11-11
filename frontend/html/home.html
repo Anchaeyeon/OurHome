@@ -36,7 +36,7 @@
             overflow: visible;
         }
 
-        .groupAdd {
+        .zoneAdd {
             width: 60px;
             height: 60px;
             position: absolute;
@@ -133,7 +133,18 @@
             left: 164px;
             top: 44px;
         }
-
+        /* 집안일 입력란 스타일 */
+        #taskName {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            /* 둥근 모서리 */
+            box-sizing: border-box;
+        }
 
 .Nline {
     background: #ffffff;
@@ -176,26 +187,17 @@
     bottom: 2.53%;
     top: 93.19%;
     overflow: visible;
-}
-    
-  
-        #zoneName {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-        }
-
-
+} 
         /* 구역 리스트 컨테이너 */
         #zonesContainer {
             display: flex;
             flex-wrap: wrap;
-            
             justify-content: flex-start;
-            gap: 10px;
+            margin-top: 100px;
+             gap: 10px;
             padding: 10px;
+            overflow-y: auto; /* 스크롤 추가 */
+
         }
 
         /* 구역 컨테이너 스타일 */
@@ -231,6 +233,24 @@
             cursor: pointer;
             text-align: center;
         }
+        /* 집안일 리스트 스타일 */
+.task-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+    width: 100%;
+    overflow-y: auto; /* 스크롤 추가 */
+}
+
+.task-item {
+    padding: 8px;
+    margin: 5px 0;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
 </style>
 </head>
 <body>
@@ -241,7 +261,7 @@
             <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
         </svg>
         
-        <img src="img/plus.png" class="groupAdd" onclick="openZoneModal()">
+        <img src="img/plus.png" class="zoneAdd" onclick="openZoneModal()">
         
         <div id="zonesContainer"></div> <!--생성된 구역--->
 
@@ -259,6 +279,18 @@
             </a>
         </div>
 
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <img src="img/xBtn.png" class="close" onclick="closeTask()" alt="닫기 버튼">
+            <h2>집안일 추가</h2>
+            <p>완료해야 할 집안일</p>
+            <input type="text" id="taskName">
+            <p>보상</p>
+            <input type="number" name="number_select" min="1" max="10" value="1">
+            <button class="add-button" onclick="addTask()">추가</button>
+        </div>
+    </div>
+
     <!-- The Modal -->
     <div id="ZoneModal" class="modal">
         <div class="modal-content">
@@ -272,48 +304,94 @@
 </div>
    
     <script>
-      function openZoneModal() {
-            document.getElementById("ZoneModal").style.display = "block";
+    let currentZoneId = null;
+
+    function openZoneModal() {
+        document.getElementById("ZoneModal").style.display = "block";
+    }
+
+    function closeZoneModal() {
+        document.getElementById("ZoneModal").style.display = "none";
+    }
+
+    // 구역 추가 함수
+    function addZone() {
+        const zoneName = document.getElementById("zoneName").value.trim();
+
+        if (zoneName === '') {
+            alert("구역 이름을 입력해주세요.");
+            return;
         }
 
-        function closeZoneModal() {
-            document.getElementById("ZoneModal").style.display = "none";
+        const zoneId = `zone-${Date.now()}`; // 고유한 구역 ID 생성
+
+        const zoneDiv = document.createElement("div");
+        zoneDiv.className = "zone-container";
+        zoneDiv.id = zoneId;
+
+        // 구역 이름 표시
+        const zoneTitle = document.createElement("div");
+        zoneTitle.className = "zone-title";
+        zoneTitle.innerText = zoneName;
+
+        // 집안일 리스트
+        const taskList = document.createElement("ul");
+        taskList.className = "task-list";
+        taskList.id = `${zoneId}-tasks`;
+
+        // 집안일 추가 버튼
+        const taskButton = document.createElement("button");
+        taskButton.className = "task-button";
+        taskButton.innerText = "집안일 추가";
+        taskButton.onclick = () => openTask(zoneId);
+
+        // 구역 컨테이너에 요소 추가
+        zoneDiv.appendChild(zoneTitle);
+        zoneDiv.appendChild(taskList);
+        zoneDiv.appendChild(taskButton);
+        document.getElementById("zonesContainer").appendChild(zoneDiv);
+
+        closeZoneModal();
+        document.getElementById("zoneName").value = '';
+    }
+
+    // 집안일 추가 팝업창 열기
+    function openTask(zoneId) {
+        currentZoneId = zoneId; // 현재 구역 ID 저장
+        document.getElementById("taskModal").style.display = "block";
+    }
+
+    // 집안일 추가 팝업창 닫기
+    function closeTask() {
+        document.getElementById("taskModal").style.display = "none";
+    }
+
+    // 집안일 추가 함수
+    function addTask() {
+        const taskName = document.getElementById("taskName").value.trim();
+
+        if (taskName === '') {
+            alert("집안일을 입력해주세요.");
+            return;
         }
 
-        function addZone() {
-            const zoneName = document.getElementById("zoneName").value.trim();
+        const taskList = document.getElementById(`${currentZoneId}-tasks`);
+        const taskItem = document.createElement("li");
+        taskItem.className = "task-item";
+        taskItem.innerText = taskName;
 
-            if (zoneName === '') {
-                alert("구역 이름을 입력해주세요.");
-                return;
-            }
+        // 집안일 리스트에 추가
+        taskList.appendChild(taskItem);
 
-            const zoneDiv = document.createElement("div");
-            zoneDiv.className = "zone-container";
+        closeTask();
+        document.getElementById("taskName").value = '';
+    }
 
-            // 구역 이름 표시
-            const zoneTitle = document.createElement("div");
-            zoneTitle.className = "zone-title";
-            zoneTitle.innerText = zoneName;
+    // 메인 화면으로 이동
+    function goMain() {
+        window.location.href = "Main.html";
+    }
 
-            // 집안일 추가 버튼
-            const taskButton = document.createElement("button");
-            taskButton.className = "task-button";
-            taskButton.innerText = "집안일 추가";
-            taskButton.onclick = () => alert(`${zoneName}에 집안일을 추가하세요.`);
-
-            // 구역 컨테이너에 요소 추가
-            zoneDiv.appendChild(zoneTitle);
-            zoneDiv.appendChild(taskButton);
-            zonesContainer.appendChild(zoneDiv);
-
-            closeZoneModal();
-            document.getElementById("zoneName").value = '';
-        }
-
-        function goMain() {
-            window.location.href = "Main.html";
-        }
     </script>
 </body>
 </html>
