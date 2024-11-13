@@ -3,6 +3,13 @@
 <head>
     <title></title>
     <style>
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -32,7 +39,7 @@
         .our-home {
             color: #000000;
             text-align: left;
-            font-family: 'Pretendard-Medium', sans-serif;
+            font-family: 'Pretendard-Regular';
             font-size: 24px;
             font-weight: 500;
             position: absolute;
@@ -63,9 +70,9 @@
             background-color: #1c98ed;
             border: none;
             text-align: center;
-            font-family: 'Pretendard-SemiBold', sans-serif;
+            font-family: 'Pretendard-Regular';
             font-size: 24px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             border-radius: 25px;
             width: 318px;
@@ -189,55 +196,64 @@
         }
 
         /* 완료된 집안일 모달 스타일 */
-#completedTasksModal {
-    display: none;
-    position: fixed;
-    z-index: 2;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-     overflow-y: auto; /* 스크롤 추가 */
-    max-height: 852px; /* 높이 조정 */
-}
+        #completedTasksModal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow-y: auto; /* 스크롤 추가 */
+            max-height: 852px; /* 높이 조정 */
+        }
 
-#completedTasksModal .modal-content {
-    background-color: white;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 400px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
+        #completedTasksModal .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-#completedTasksList {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+        #completedTasksList {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-.completed-task-item {
-    display: flex;
-    align-items: center;
-    background-color: #f9f9f9;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-}
+        .completed-task-item {
+            display: flex;
+            align-items: center;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
 
-.completed-task-info {
-    flex: 1;
-    margin-left: 10px;
-}
+        .completed-task-info {
+            flex: 1;
+            margin-left: 10px;
+        }
 
-.completed-task-image {
-    width: 60px;
-    height: 60px;
-    border-radius: 5px;
-    object-fit: cover;
-}
+        .completed-task-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        h2 {
+            font-family: 'Pretendard-Regular';
+        }
+        
+        p {
+            font-family: 'Pretendard-Regular';
+            font-size: 15px;
+        }
 
     </style>
 </head>

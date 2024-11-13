@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>login</title>
+    <title>join</title>
     <style>
         @font-face {
             font-family: 'Pretendard-Regular';
@@ -38,7 +38,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .login {
+        .join {
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -53,14 +53,14 @@
             padding-top: 65%;
         }
 
-        #login-form {
+        #join-form {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
         }
 
-        #login-form > input{
+        #join-form > input{
             width: 80%;
             height: 48px;
             padding: 0 10px;
@@ -72,21 +72,15 @@
             outline: none;
         }
 
-        #login-form > input::placeholder{
+        #join-form > input::placeholder{
             color: #D2D2D2;
         }
 
-        #login-form > input[type="submit"]{
+        #join-form > input[type="submit"]{
             color: #fff;
             font-size: 16px;
             background-color: #1C98ED;
             margin-top: 10px;
-        }
-
-        a {
-            text-decoration-line: none;
-            color: #949494;
-            font-size: smaller;
         }
 
     </style>
@@ -94,16 +88,17 @@
 
 <body>
 <div class="div">
-    <div class="login">
-        <p>login</p>
-    </div class="login-container">
-        <form method="post" action="" id="login-form">
+    <div class="join">
+        <p>Join</p>
+    </div class="join-container">
+        <form method="post" action="" id="join-form">
             <input type="text" name="userName" placeholder="아이디">
-            <input type="password" name="userPW" placeholder="비밀번호">
-            <input type="submit" value="Login">
-            <a href="/frontend/html/join.html">회원가입 하러가기</a>
+            <input type="password" name="userPW1" placeholder="비밀번호">
+            <input type="password" name="userPW2" placeholder="비밀번호 확인">
+            <input type="submit" value="Join">
         </form>
     </div>
     
 </body>
+
 </html>

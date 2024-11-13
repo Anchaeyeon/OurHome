@@ -3,6 +3,13 @@
 <head>
     <title></title>
     <style>
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -42,9 +49,9 @@
         .toRequest {
             color: #ffffff;
             text-align: center;
-            font-family: 'Pretendard-SemiBold', sans-serif;
+            font-family: 'Pretendard-Regular';
             font-size: 20px;
-            font-weight: 600;
+            font-weight: 500;
             position: absolute;
             left: 25px;
             top: 15px;
@@ -62,9 +69,9 @@
         .getRequest {
             color: #ffffff;
             text-align: center;
-            font-family: 'Pretendard-SemiBold', sans-serif;
+            font-family: 'Pretendard-Regular';
             font-size: 20px;
-            font-weight: 600;
+            font-weight: 500;
             position: absolute;
             left: 205px;
             top: 15px;
@@ -76,6 +83,123 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+        }
+
+        .div {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+        column-gap: 25px;
+        padding-top: 24px;
+        }
+
+        .toRequest:hover {
+            background-color: #1C98ED;
+        }
+
+        .toRequest:active {
+            background-color: #1C98ED;
+        }
+
+        .toRequest {
+            font-family: 'Pretendard-Regular';
+            font-weight: 500;
+            background-color: #BFE4F9;
+            border-radius: 10px;
+            width: 150px;
+            height: 50px;
+            border: none;
+            color: white;
+            font-size: 17px;
+        }
+
+        .getRequest:hover {
+            background-color: #1C98ED;
+        }
+
+        .getRequest:active {
+            background-color: #1C98ED;
+        }
+
+        .getRequest {
+            font-family: 'Pretendard-Regular';
+            font-weight: 500;
+            background-color: #BFE4F9;
+            border-radius: 10px;
+            width: 150px;
+            height: 50px;
+            border: none;
+            color: white;
+            font-size: 17px;
+        }
+
+        .box {
+            width: 311px;
+            height: 215px;
+            background-image: linear-gradient(to bottom, #BFE4F9 70%, white 30%);
+            border-radius: 20px;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            margin: 24px auto;
+        }
+
+
+        /* 받은 요청 */
+        .txt-request {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            color: rgba(0, 0, 0, 0.90);
+            font-family: 'Pretendard-Regular';
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            padding-top: 25px;
+        }
+
+        .deadline {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            color: rgba(0, 0, 0, 0.90);
+            font-family: 'Pretendard-Regular';
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            padding-top: 10px;
+        }
+
+        .btn-container {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: center;
+            column-gap: 25px;
+        }
+
+        .btn-OX {
+            font-family: 'Pretendard-Regular';
+            font-weight: 500;
+            background-color: #BFE4F9;
+            border-radius: 20px;
+            width: 116px;
+            height: 45px;
+            border: none;
+            color: white;
+            font-size: 17px;
+            margin-top: 60px;
+        }
+
+        .btn-OX:hover {
+            background-color: #1C98ED;
+        }
+
+        .btn-OX:active {
+            background-color: #1C98ED;
         }
 
         .Nline {
@@ -90,6 +214,183 @@
             top: 773px;
         }
 
+        .circle-container1 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .circle-container2 {
+            display: flex;
+            flex-direction: column;
+            width: 45%; /* 한 줄에 두 개씩 배치 */
+            align-items: center;
+        }
+
+        /* 요청하기 */
+        .circle {
+            width: 124px;
+            height: 124px;
+            background-color: #ffffff;
+            margin: 23px;
+            border-radius: 50%;
+            border: 3px solid #1C98ED;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .name {
+            font-size: 18px;
+            margin-top: -10px;
+            text-align: center;
+            font-family: 'Pretendard-Regular';
+        }
+
+        .plus {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            left: 310px;
+            top: 610px;
+            overflow: visible;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        /* 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            height: 350px;
+            text-align: center;
+            position: relative;
+            top: -120px;
+        }
+
+        .Plusmodalcontent{
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            position: relative;
+            top: 180px;
+            left: 50px;
+        }
+
+        .modal .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close {
+            float: right;
+            width: 35px;
+            height: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        #MissionName {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            /* 둥근 모서리 */
+            box-sizing: border-box;
+        }
+
+        .add-button {
+            display: block;
+            width: 50%;
+            padding: 12px;
+            background-color: #1C98ED;
+            color: white;
+            font-size: 1em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 15px auto 0;
+            /* 중앙 정렬 */
+            margin-top: 15px;
+            box-sizing: border-box;
+        }
+
+        #taskReward {
+            width: 40%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #FFF;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-sizing: border-box;
+            text-align: left; /* 숫자 입력도 왼쪽 정렬 */
+            display: block;  /* 인라인 요소를 블록 요소로 변환하여 부모 요소가 왼쪽으로 정렬되도록 */
+        }
+
+        #plus-name {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            /* 둥근 모서리 */
+            box-sizing: border-box;
+        }
+
+        .check-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 250px;
+        }
+
+        .check-close {
+            float: right;
+            width: 35px;
+            height: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        /* nav바 */
         .home {
             width: 47px;
             height: 47px;
@@ -135,14 +436,32 @@
         .active {
             display: block;
         }
+
+        #date {
+            margin-left: -160px;
+            margin-top: 10px;
+        }
+
+        h2 {
+            font-family: 'Pretendard-Regular';
+            display: flex;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-family: 'Pretendard-Regular';
+            display: flex;
+            text-align: left;
+        }
     </style>
 </head>
 
 <body>
     <div class="div">
         <!-- 버튼 영역 -->
-        <div class="toRequest" onclick="showContent('requestContent')"> 요청하기 </div>
-        <div class="getRequest" onclick="showContent('receivedContent')"> 요청받기 </div>
+        <div class="toRequest" onclick="showContent('requestPage')"> 요청하기 </div>
+        <div class="getRequest" onclick="showContent('receivedPage')"> 요청받기 </div>
 
         <svg class="line" width="349" height="25" viewBox="0 0 349 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
@@ -151,15 +470,68 @@
         <div class="Nline"></div>
 
         <!-- 요청하기 화면 -->
-        <div id="requestContent" class="content active">
+        <div id="requestPage" class="content active">
             <h2>요청하기 화면</h2>
             <p>여기에 요청하기 내용을 입력하세요.</p>
+            <div class="circle-container1" id="profile1">
+                <div class="circle-container2">
+                    <div id="circle1" class="circle" onclick="document.getElementById('file-input').click();"></div>
+                    <div class="name">나</div>
+                </div>
+                <div class="circle-container2" id="profile2">
+                    <div id="circle2" class="circle" onclick="openModal();"></div>
+                    <div class="name">엄마</div>
+                </div>
+            </div>
+            <input type="file" id="file-input" accept="image/*" onchange="displayImage(event)">
+            <img src="img/plus.png" class="plus" onclick="openZoneModal()">
+        </div>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <img src="img/xBtn.png" class="close" onclick="RequestcloseModal()" alt="닫기 버튼">
+                <h2>요청하기</h2>
+                <p>요청할 미션</p>
+                <input type="text" id="MissionName">
+                <p>보상</p>
+                <input type="number" id="taskReward" name="number_select" min="1" max="10" value="1">
+                <p>기한</p>
+                <input type="date" id="date" max="2030-12-31" min="2024-01-31" value="2024-10-20"></input>
+                <button class="add-button" onclick="completeMission()">완료</button>
+            </div>
+        </div>
+
+        <div id="plusModal" class="modal">
+            <div class="Plusmodalcontent">
+                <img src="img/xBtn.png" class="close" onclick="AddcloseModal()" alt="닫기 버튼">
+                <h2>추가하기</h2>
+                <p>추가할 사람</p>
+                <input type="text" id="plus-name" placeholder="추가할 사람의 이름">
+                <button class="add-button" onclick="completePlus()">완료</button>
+            </div>
         </div>
 
         <!-- 받은 요청 화면 -->
-        <div id="receivedContent" class="content">
+        <div id="receivedPage" class="content">
             <h2>받은 요청 화면</h2>
             <p>여기에 받은 요청 내용을 표시하세요.</p>
+            <div class="box">
+                <div class="txt-request">엄마님이 숙제를 요청하셨습니다.</div><br>
+                <div class="deadline">기한 : 00까지</div>
+                <div class="btn-container">
+                    <button class="btn-OX" onclick="okRequest('checkModal')">수락</button>
+                    <button class="btn-OX" onclick="rejectRequest()">거절</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="checkModal" class="modal">
+            <div class="check-content">
+                <img src="img/xBtn.png" class="check-close" onclick="closeRequest()" alt="닫기 버튼">
+                <h2>인증 사진 첨부</h2>
+                <input type="file" class="check-upload" accept="image/*" id="checkInput">
+                <button class="add-button" onclick="completeRequest()">완료</button>
+            </div>
         </div>
 
         <!-- 하단 네비게이션 -->
@@ -186,6 +558,117 @@
 
             // 클릭한 버튼에 해당하는 콘텐츠만 표시
             document.getElementById(contentId).classList.add('active');
+        }
+    
+
+        //요청하기
+        function showContent(contentId) {
+            document.querySelectorAll('.content').forEach((content) => {
+                content.style.display = 'none';
+            });
+            document.getElementById(contentId).style.display = 'block';
+        }
+
+        function displayImage(event) {
+            const circle = document.getElementById('circle1');
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    circle.style.backgroundImage = `url(${e.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 모달 열기
+        function openModal() {
+            document.getElementById('myModal').style.display = 'flex';
+        }
+
+        // 모달 닫기
+        function RequestcloseModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+        function AddcloseModal() {
+            document.getElementById('plusModal').style.display = 'none';
+        }
+
+
+        // plus 눌렀을 때
+        let currentZoneId = null;
+
+        function openZoneModal() {
+            document.getElementById("plusModal").style.display = "block";
+        }
+
+        //요청 수락 후 완료 버튼 눌렀을 때
+        function okRequest() {
+            document.getElementById('checkModal').style.display = "block";
+        }
+
+        function completeRequest(){
+            const imageInput = document.getElementById("checkInput");
+            if (imageInput.files.length > 0) {
+                // 첨부되었다면 모달 숨기기
+                document.getElementById('checkModal').style.display = "none";
+                alert("사진이 성공적으로 첨부되었습니다.");
+            }
+            else {
+                alert("사진을 첨부해주세요.");
+            }
+            document.getElementById('receivedPage').style.display = 'none';
+        }
+
+        function closeRequest() {
+            document.getElementById('checkModal').style.display = 'none';
+        }
+        
+        // 추가할 사람을 완료했을때
+        function completePlus() {
+            var name = document.getElementById('plus-name').value;
+            if (name.trim() === '') {
+                alert('이름을 입력해주세요');
+                return;
+            }
+
+            // 동그라미와 이름을 담을 새로운 div 요소 생성
+            var circleContainer2 = document.createElement('div');
+            circleContainer2.classList.add('circle-container2');
+
+            var circle = document.createElement('div');
+            circle.classList.add('circle');
+
+            circle.onclick = function() {
+                document.getElementById('myModal').style.display = 'block';
+            };
+
+            var nameDiv = document.createElement('div');
+            nameDiv.classList.add('name');
+            nameDiv.textContent = name; // 입력된 이름을 텍스트로 추가
+
+            // 동그라미와 이름을 각각 새로운 div에 추가
+            circleContainer2.appendChild(circle);
+            circleContainer2.appendChild(nameDiv);
+
+            // 동적으로 추가된 요소를 circle-container1에 추가
+            document.getElementById('profile1').appendChild(circleContainer2);
+
+            // 모달 닫기
+            AddcloseModal();
+
+            // 입력 필드 초기화
+            document.getElementById('plus-name').value = '';
+        }
+
+        function AddcloseModal() {
+            // 모달을 닫는 코드
+            document.getElementById('plusModal').style.display = 'none';
+        }
+
+        //요청 거절했을 때
+        function rejectRequest() {
+            document.getElementById('receivedPage').style.display = 'none';
         }
     </script>
 </body>
