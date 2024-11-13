@@ -214,6 +214,20 @@
             top: 773px;
         }
 
+        .circle-container1 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .circle-container2 {
+            display: flex;
+            flex-direction: column;
+            width: 45%; /* 한 줄에 두 개씩 배치 */
+            align-items: center;
+        }
+
         /* 요청하기 */
         .circle {
             width: 124px;
@@ -228,7 +242,13 @@
             justify-content: center;
             background-size: cover;
             background-position: center;
-            float: left;
+        }
+
+        .name {
+            font-size: 18px;
+            margin-top: -10px;
+            text-align: center;
+            font-family: 'Pretendard-Regular';
         }
 
         .plus {
@@ -453,8 +473,16 @@
         <div id="requestPage" class="content active">
             <h2>요청하기 화면</h2>
             <p>여기에 요청하기 내용을 입력하세요.</p>
-            <div id="circle1" class="circle" onclick="document.getElementById('file-input').click();"></div>
-            <div id="circle2" class="circle" onclick="openModal();"></div>
+            <div class="circle-container1" id="profile1">
+                <div class="circle-container2">
+                    <div id="circle1" class="circle" onclick="document.getElementById('file-input').click();"></div>
+                    <div class="name">나</div>
+                </div>
+                <div class="circle-container2" id="profile2">
+                    <div id="circle2" class="circle" onclick="openModal();"></div>
+                    <div class="name">엄마</div>
+                </div>
+            </div>
             <input type="file" id="file-input" accept="image/*" onchange="displayImage(event)">
             <img src="img/plus.png" class="plus" onclick="openZoneModal()">
         </div>
@@ -596,6 +624,48 @@
             document.getElementById('checkModal').style.display = 'none';
         }
         
+        // 추가할 사람을 완료했을때
+        function completePlus() {
+            var name = document.getElementById('plus-name').value;
+            if (name.trim() === '') {
+                alert('이름을 입력해주세요');
+                return;
+            }
+
+            // 동그라미와 이름을 담을 새로운 div 요소 생성
+            var circleContainer2 = document.createElement('div');
+            circleContainer2.classList.add('circle-container2');
+
+            var circle = document.createElement('div');
+            circle.classList.add('circle');
+
+            circle.onclick = function() {
+                document.getElementById('myModal').style.display = 'block';
+            };
+
+            var nameDiv = document.createElement('div');
+            nameDiv.classList.add('name');
+            nameDiv.textContent = name; // 입력된 이름을 텍스트로 추가
+
+            // 동그라미와 이름을 각각 새로운 div에 추가
+            circleContainer2.appendChild(circle);
+            circleContainer2.appendChild(nameDiv);
+
+            // 동적으로 추가된 요소를 circle-container1에 추가
+            document.getElementById('profile1').appendChild(circleContainer2);
+
+            // 모달 닫기
+            AddcloseModal();
+
+            // 입력 필드 초기화
+            document.getElementById('plus-name').value = '';
+        }
+
+        function AddcloseModal() {
+            // 모달을 닫는 코드
+            document.getElementById('plusModal').style.display = 'none';
+        }
+
         //요청 거절했을 때
         function rejectRequest() {
             document.getElementById('receivedPage').style.display = 'none';
