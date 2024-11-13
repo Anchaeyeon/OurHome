@@ -1,8 +1,9 @@
 <html>
+
 <head>
     <title></title>
     <style>
- * {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -27,7 +28,8 @@
             transform-origin: top center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-       .line {
+
+        .line {
             width: 349px;
             height: 25px;
             position: absolute;
@@ -44,7 +46,8 @@
             top: 680px;
             overflow: visible;
         }
-    .modal {
+
+        .modal {
             display: none;
             /* 팝업 기본 감춤 */
             position: fixed;
@@ -82,7 +85,8 @@
             text-align: center;
             color: #333;
         }
-              /* 그룹 이름 입력란 스타일 */
+
+        /* 그룹 이름 입력란 스타일 */
         #groupName {
             width: 100%;
             padding: 12px;
@@ -126,6 +130,7 @@
             margin-top: 15px;
             box-sizing: border-box;
         }
+
         .returnBtn {
             width: 2.54%;
             height: 2.35%;
@@ -150,52 +155,51 @@
         }
 
 
-.Nline {
-    background: #ffffff;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0.30);
-    border-width: 1px;
-    width: 403px;
-    height: 81px;
-    position: absolute;
-    left: -5px;
-    top: 773px;
-}
+        .Nline {
+            background: #ffffff;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.30);
+            border-width: 1px;
+            width: 403px;
+            height: 81px;
+            position: absolute;
+            left: -5px;
+            top: 773px;
+        }
 
-.home {
-    width: 47px;
-    height: 47px;
-    position: absolute;
-    left: 50px;
-    top: 789px;
-    overflow: visible;
-}
+        .home {
+            width: 47px;
+            height: 47px;
+            position: absolute;
+            left: 50px;
+            top: 789px;
+            overflow: visible;
+        }
 
-.stat {
-    width: 8.9%;
-    height: 4.07%;
-    position: absolute;
-    right: 15.2%;
-    left: 75.9%;
-    bottom: 2.62%;
-    top: 93.31%;
-    overflow: visible;
-}
+        .stat {
+            width: 8.9%;
+            height: 4.07%;
+            position: absolute;
+            right: 15.2%;
+            left: 75.9%;
+            bottom: 2.62%;
+            top: 93.31%;
+            overflow: visible;
+        }
 
-.request {
-    width: 9.37%;
-    height: 4.28%;
-    position: absolute;
-    right: 45.34%;
-    left: 45.29%;
-    bottom: 2.53%;
-    top: 93.19%;
-    overflow: visible;
-}
-    
-
-</style>
+        .request {
+            width: 9.37%;
+            height: 4.28%;
+            position: absolute;
+            right: 45.34%;
+            left: 45.29%;
+            bottom: 2.53%;
+            top: 93.19%;
+            overflow: visible;
+        }
+    </style>
 </head>
+
 <body>
     <div class="div">
         <img src="img/return.png" class="returnBtn" onclick="goMain()">
@@ -203,12 +207,12 @@
         <svg class="line" width="349" height="25" viewBox="0 0 349 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
         </svg>
-        
+
         <img src="img/plus.png" class="groupAdd" onclick="openModal()">
 
         <div class="Nline"> </div>
-           
-   <div class="bottom-nav">
+
+        <div class="bottom-nav">
             <a href="home.html">
                 <img src="img/home-nav.png" class="home">
             </a>
@@ -220,45 +224,45 @@
             </a>
         </div>
 
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <img src="img/xBtn.png" class="close" onclick="closeModal()" alt="닫기 버튼">
-            <h2>그룹 추가</h2>
-            <p>그룹 이름</p>
-            <input type="text" placeholder="그룹 이름" id="groupName">
-            <p>그룹 사진 추가</p>
-            <input type="file" class="file-upload" accept="image/*" id="groupImageInput">
-            <button class="add-button" onclick="addGroup()">추가</button>
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <img src="img/xBtn.png" class="close" onclick="closeModal()" alt="닫기 버튼">
+                <h2>그룹 추가</h2>
+                <p>그룹 이름</p>
+                <input type="text" placeholder="그룹 이름" id="groupName">
+                <p>그룹 사진 추가</p>
+                <input type="file" class="file-upload" accept="image/*" id="groupImageInput">
+                <button class="add-button" onclick="addGroup()">추가</button>
+            </div>
         </div>
     </div>
-</div>
-   
+
     <script>
- // URL에서 그룹 이름을 읽어서 표시하는 함수
-    function updateGroupName() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const groupName = urlParams.get('groupName'); // 기존 URL에서 groupName을 가져옵니다.
+        // URL에서 그룹 이름을 읽어서 표시하는 함수
+        function updateGroupName() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const groupName = urlParams.get('groupName'); // 기존 URL에서 groupName을 가져옵니다.
 
-        if (groupName) {
-            document.getElementById("groupNameHeader").innerText = groupName; // 가져온 이름을 화면에 표시
-            console.log(groupName)
-        } else {
-            document.getElementById("groupNameHeader").innerText = "기본 그룹 이름"; // 그룹 이름이 없으면 기본 이름을 설정
+            if (groupName) {
+                document.getElementById("groupNameHeader").innerText = groupName; // 가져온 이름을 화면에 표시
+                console.log(groupName)
+            } else {
+                document.getElementById("groupNameHeader").innerText = "기본 그룹 이름"; // 그룹 이름이 없으면 기본 이름을 설정
+            }
         }
-    }
         // 페이지가 로드되면 그룹 이름을 업데이트
-            window.onload = updateGroupName;
+        window.onload = updateGroupName;
 
-    function openModal() {
-        document.getElementById("myModal").style.display = "block";
-    }
+        function openModal() {
+            document.getElementById("myModal").style.display = "block";
+        }
 
-    function closeModal() {
-        document.getElementById("myModal").style.display = "none";
-    }
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
 
-    
+
         function addGroup() {
             const groupName = document.getElementById("groupName").value;
             const fileInput = document.getElementById("groupImageInput");
@@ -294,11 +298,12 @@
             fileInput.value = '';
         }
 
-      function goMain(){
-        window.location.href="Main.html"
-      }
+        function goMain() {
+            window.location.href = "Main.html"
+        }
 
-      
+
     </script>
 </body>
+
 </html>

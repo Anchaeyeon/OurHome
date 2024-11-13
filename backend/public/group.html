@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그룹 페이지</title>
+</head>
+
+<body>
+    <h1>그룹 페이지</h1>
+    <h2 id="groupNameHeader">그룹 이름</h2>
+    <button onclick="goBack()">뒤로 가기</button>
+
+    <h3>구역 추가</h3>
+    <form id="zoneForm">
+        <label for="zoneName">구역 이름:</label>
+        <input type="text" id="zoneName" required>
+        <button type="button" onclick="addZone()">구역 추가</button>
+    </form>
+
+    <h3>구역 목록</h3>
+    <ul id="zoneList"></ul>
+
+    <script>
+        let groupId = null;
+
+        // 페이지가 로드되면 그룹 이름과 구역 목록을 표시
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            groupId = urlParams.get('groupId');  // URL에서 그룹 ID 추출
+            if (groupId) {
+                loadGroupName(groupId);  // 그룹 이름을 불러오기
+                loadZones(groupId);      // 구역 목록을 불러오기
+            }
+        };
+
+        // 그룹 이름을 불러와서 표시하는 함수
+        function loadGroupName(groupId) {
+            fetch(`/groups`)
+                .then(response => response.json())
+                .then(data => {
+                    const group = data.groups.find(group => group.id == groupId);
+                    const groupNameHeader = document.getElementById('groupNameHeader');
+                    if (group) {
+                        groupNameHeader.innerText = group.name;  // 그룹 이름 표시
+                    } else {
+                        groupNameHeader.innerText = '그룹을 찾을 수 없습니다.';
+                    }
+                })
+                .catch(error => console.error('그룹 이름 로드 실패', error));
+        }
+
+        // 구역 목록을 불러오는 함수
+        function loadZones(groupId) {
+            fetch(`/zones/${groupId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const zoneList = document.getElementById('zoneList');
+                    zoneList.innerHTML = '';
+                    if (data.zones && data.zones.length > 0) {
+                        data.zones.forEach(zone => {
+                            const li = document.createElement('li');
+                            li.innerText = zone.name;
+                            zoneList.appendChild(li);
+                        });
+                    } else {
+                        zoneList.innerHTML = '<li>구역이 없습니다.</li>';
+                    }
+                })
+                .catch(error => console.error('구역 목록 로딩 오류', error));
+        }
+
+        // 구역 추가 함수
+        function addZone() {
+            const zoneName = document.getElementById('zoneName').value;
+            if (!zoneName) {
+                alert('구역 이름을 입력하세요!');
+                return;
+            }
+
+            fetch('/addZone', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ zoneName, groupId })
+            })
+                .then(response => response.json())
+                            .then(response => response.json())
+                                        .then(data => {
+                                            alert(data.message);
+                                            loadZones(groupId);  // 구역 추가 후 구역 목록 새로고침
+                                        })
+                                        .catch(error => console.error('구역 추가 실패', error));
+                                }
+
+                                // 뒤로 가기 버튼 클릭 시 이전 페이지로 돌아가기
+                                function goBack() {
+                                    window.history.back();
+                                }
+                            </script>
+    </body>
+    
+    </html>
