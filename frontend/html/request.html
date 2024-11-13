@@ -213,22 +213,21 @@
             left: -5px;
             top: 773px;
         }
-
+          /* 내 프로필 */
         .circle-container1 {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: left;
             gap: 20px;
         }
-
+        
         .circle-container2 {
             display: flex;
             flex-direction: column;
             width: 45%; /* 한 줄에 두 개씩 배치 */
             align-items: center;
         }
-
-        /* 요청하기 */
+        /* 멤버 프로필 */
         .circle {
             width: 124px;
             height: 124px;
@@ -251,7 +250,7 @@
             font-family: 'Pretendard-Regular';
         }
 
-        .plus {
+        .plusBtn {
             width: 60px;
             height: 60px;
             position: absolute;
@@ -286,7 +285,8 @@
             height: 350px;
             text-align: center;
             position: relative;
-            top: -120px;
+            top: 200px;
+               left: 50px;
         }
 
         .Plusmodalcontent{
@@ -447,6 +447,7 @@
             display: flex;
             text-align: left;
             margin-bottom: 10px;
+            margin-top: 10px;
         }
 
         p {
@@ -473,21 +474,22 @@
         <div id="requestPage" class="content active">
             <h2>요청하기 화면</h2>
             <p>여기에 요청하기 내용을 입력하세요.</p>
-            <div class="circle-container1" id="profile1">
+
+            <div class="circle-container1" id="profile1"> <!-- 내 프로필 띄우기 -->
                 <div class="circle-container2">
                     <div id="circle1" class="circle" onclick="document.getElementById('file-input').click();"></div>
+                    <input type="file" id="file-input" accept="image/*" onchange="displayImage(event)">
                     <div class="name">나</div>
                 </div>
-                <div class="circle-container2" id="profile2">
-                    <div id="circle2" class="circle" onclick="openModal();"></div>
-                    <div class="name">엄마</div>
-                </div>
+        
             </div>
-            <input type="file" id="file-input" accept="image/*" onchange="displayImage(event)">
-            <img src="img/plus.png" class="plus" onclick="openZoneModal()">
-        </div>
 
-        <div id="myModal" class="modal">
+            <div id="memberContainer" onclick="openRequestModal()"></div> <!--생성된 그룹--->
+            
+            <img src="img/plus.png" class="plusBtn" onclick="openMemberAdd()">
+        </div>
+<!-- 요청 모달-->
+        <div id="RequestModal" class="modal">
             <div class="modal-content">
                 <img src="img/xBtn.png" class="close" onclick="RequestcloseModal()" alt="닫기 버튼">
                 <h2>요청하기</h2>
@@ -500,10 +502,10 @@
                 <button class="add-button" onclick="completeMission()">완료</button>
             </div>
         </div>
-
-        <div id="plusModal" class="modal">
+<!-- 그룹원 추가-->
+        <div id="addMemberModal" class="modal">
             <div class="Plusmodalcontent">
-                <img src="img/xBtn.png" class="close" onclick="AddcloseModal()" alt="닫기 버튼">
+                <img src="img/xBtn.png" class="close" onclick="AddMemberclose()" alt="닫기 버튼">
                 <h2>추가하기</h2>
                 <p>추가할 사람</p>
                 <input type="text" id="plus-name" placeholder="추가할 사람의 이름">
@@ -515,7 +517,7 @@
         <div id="receivedPage" class="content">
             <h2>받은 요청 화면</h2>
             <p>여기에 받은 요청 내용을 표시하세요.</p>
-            <div class="box">
+            <div class="box" id="receivedRequest">
                 <div class="txt-request">엄마님이 숙제를 요청하셨습니다.</div><br>
                 <div class="deadline">기한 : 00까지</div>
                 <div class="btn-container">
@@ -582,24 +584,24 @@
         }
 
         // 모달 열기
-        function openModal() {
-            document.getElementById('myModal').style.display = 'flex';
+        function openRequestModal() {
+            document.getElementById('RequestModal').style.display = 'flex';
         }
 
         // 모달 닫기
         function RequestcloseModal() {
-            document.getElementById('myModal').style.display = 'none';
+            document.getElementById('RequestModal').style.display = 'none';
         }
-        function AddcloseModal() {
-            document.getElementById('plusModal').style.display = 'none';
+        function AddMemberclose() {
+            document.getElementById('addMemberModal').style.display = 'none';
         }
 
 
         // plus 눌렀을 때
         let currentZoneId = null;
 
-        function openZoneModal() {
-            document.getElementById("plusModal").style.display = "block";
+        function openMemberAdd() {
+            document.getElementById("addMemberModal").style.display = "block";
         }
 
         //요청 수락 후 완료 버튼 눌렀을 때
@@ -612,19 +614,19 @@
             if (imageInput.files.length > 0) {
                 // 첨부되었다면 모달 숨기기
                 document.getElementById('checkModal').style.display = "none";
-                alert("사진이 성공적으로 첨부되었습니다.");
+                alert("요청받은 집안일이 완료되었습니다.");
             }
             else {
                 alert("사진을 첨부해주세요.");
             }
-            document.getElementById('receivedPage').style.display = 'none';
+            document.getElementById('receivedRequest').style.display = 'none';
         }
 
         function closeRequest() {
             document.getElementById('checkModal').style.display = 'none';
         }
         
-        // 추가할 사람을 완료했을때
+        // 그룹원추가 완료   
         function completePlus() {
             var name = document.getElementById('plus-name').value;
             if (name.trim() === '') {
@@ -640,7 +642,7 @@
             circle.classList.add('circle');
 
             circle.onclick = function() {
-                document.getElementById('myModal').style.display = 'block';
+                document.getElementById('RequestModal').style.display = 'block';
             };
 
             var nameDiv = document.createElement('div');
@@ -655,20 +657,20 @@
             document.getElementById('profile1').appendChild(circleContainer2);
 
             // 모달 닫기
-            AddcloseModal();
+            AddMemberclose();
 
             // 입력 필드 초기화
             document.getElementById('plus-name').value = '';
         }
 
-        function AddcloseModal() {
-            // 모달을 닫는 코드
-            document.getElementById('plusModal').style.display = 'none';
+        function AddMemberclose() {
+            // 멤버 추가 모달 
+            document.getElementById('addMemberModal').style.display = 'none';
         }
 
         //요청 거절했을 때
         function rejectRequest() {
-            document.getElementById('receivedPage').style.display = 'none';
+            document.getElementById('receivedRequest').style.display = 'none';
         }
     </script>
 </body>
