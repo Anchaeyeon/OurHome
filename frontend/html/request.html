@@ -231,6 +231,15 @@
             float: left;
         }
 
+        .plus {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            left: 310px;
+            top: 610px;
+            overflow: visible;
+        }
+
         #file-input {
             display: none;
         }
@@ -254,7 +263,21 @@
             padding: 20px;
             border-radius: 10px;
             width: 300px;
+            height: 350px;
             text-align: center;
+            position: relative;
+            top: -120px;
+        }
+
+        .Plusmodalcontent{
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            position: relative;
+            top: 180px;
+            left: 50px;
         }
 
         .modal .close {
@@ -266,16 +289,25 @@
             cursor: pointer;
         }
 
-        #groupName {
-            display: flex;
-            width: 40%;
+        .close {
+            float: right;
+            width: 35px;
+            height: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        #MissionName {
+            width: 100%;
             padding: 12px;
             margin: 10px 0;
-            background-color: #FFF;
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
             border: 1px solid #ccc;
             border-radius: 10px;
+            /* 둥근 모서리 */
             box-sizing: border-box;
-            text-align: left;
         }
 
         .add-button {
@@ -304,6 +336,38 @@
             box-sizing: border-box;
             text-align: left; /* 숫자 입력도 왼쪽 정렬 */
             display: block;  /* 인라인 요소를 블록 요소로 변환하여 부모 요소가 왼쪽으로 정렬되도록 */
+        }
+
+        #plus-name {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            /* 둥근 모서리 */
+            box-sizing: border-box;
+        }
+
+        .check-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 250px;
+        }
+
+        .check-close {
+            float: right;
+            width: 35px;
+            height: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 5px;
         }
 
         /* nav바 */
@@ -353,6 +417,11 @@
             display: block;
         }
 
+        #date {
+            margin-left: -160px;
+            margin-top: 10px;
+        }
+
         h2 {
             font-family: 'Pretendard-Regular';
             display: flex;
@@ -371,8 +440,8 @@
 <body>
     <div class="div">
         <!-- 버튼 영역 -->
-        <div class="toRequest" onclick="showContent('requestContent')"> 요청하기 </div>
-        <div class="getRequest" onclick="showContent('receivedContent')"> 요청받기 </div>
+        <div class="toRequest" onclick="showContent('requestPage')"> 요청하기 </div>
+        <div class="getRequest" onclick="showContent('receivedPage')"> 요청받기 </div>
 
         <svg class="line" width="349" height="25" viewBox="0 0 349 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
@@ -381,36 +450,59 @@
         <div class="Nline"></div>
 
         <!-- 요청하기 화면 -->
-        <div id="requestContent" class="content active">
+        <div id="requestPage" class="content active">
             <h2>요청하기 화면</h2>
             <p>여기에 요청하기 내용을 입력하세요.</p>
             <div id="circle1" class="circle" onclick="document.getElementById('file-input').click();"></div>
             <div id="circle2" class="circle" onclick="openModal();"></div>
             <input type="file" id="file-input" accept="image/*" onchange="displayImage(event)">
+            <img src="img/plus.png" class="plus" onclick="openZoneModal()">
         </div>
+
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
+                <img src="img/xBtn.png" class="close" onclick="RequestcloseModal()" alt="닫기 버튼">
                 <h2>요청하기</h2>
                 <p>요청할 미션</p>
-                <input type="text" id="groupName">
+                <input type="text" id="MissionName">
                 <p>보상</p>
                 <input type="number" id="taskReward" name="number_select" min="1" max="10" value="1">
-                <button class="add-button" onclick="addTask()">추가</button>
+                <p>기한</p>
+                <input type="date" id="date" max="2030-12-31" min="2024-01-31" value="2024-10-20"></input>
+                <button class="add-button" onclick="completeMission()">완료</button>
+            </div>
+        </div>
+
+        <div id="plusModal" class="modal">
+            <div class="Plusmodalcontent">
+                <img src="img/xBtn.png" class="close" onclick="AddcloseModal()" alt="닫기 버튼">
+                <h2>추가하기</h2>
+                <p>추가할 사람</p>
+                <input type="text" id="plus-name" placeholder="추가할 사람의 이름">
+                <button class="add-button" onclick="completePlus()">완료</button>
             </div>
         </div>
 
         <!-- 받은 요청 화면 -->
-        <div id="receivedContent" class="content">
+        <div id="receivedPage" class="content">
             <h2>받은 요청 화면</h2>
             <p>여기에 받은 요청 내용을 표시하세요.</p>
             <div class="box">
                 <div class="txt-request">엄마님이 숙제를 요청하셨습니다.</div><br>
                 <div class="deadline">기한 : 00까지</div>
                 <div class="btn-container">
-                    <button class="btn-OX">수락</button>
-                    <button class="btn-OX">거절</button>
+                    <button class="btn-OX" onclick="okRequest('checkModal')">수락</button>
+                    <button class="btn-OX" onclick="rejectRequest()">거절</button>
                 </div>
+            </div>
+        </div>
+
+        <div id="checkModal" class="modal">
+            <div class="check-content">
+                <img src="img/xBtn.png" class="check-close" onclick="closeRequest()" alt="닫기 버튼">
+                <h2>인증 사진 첨부</h2>
+                <input type="file" class="check-upload" accept="image/*" id="checkInput">
+                <button class="add-button" onclick="completeRequest()">완료</button>
             </div>
         </div>
 
@@ -439,6 +531,7 @@
             // 클릭한 버튼에 해당하는 콘텐츠만 표시
             document.getElementById(contentId).classList.add('active');
         }
+    
 
         //요청하기
         function showContent(contentId) {
@@ -449,7 +542,7 @@
         }
 
         function displayImage(event) {
-            const circle = document.getElementById('circle');
+            const circle = document.getElementById('circle1');
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -466,8 +559,46 @@
         }
 
         // 모달 닫기
-        function closeModal() {
+        function RequestcloseModal() {
             document.getElementById('myModal').style.display = 'none';
+        }
+        function AddcloseModal() {
+            document.getElementById('plusModal').style.display = 'none';
+        }
+
+
+        // plus 눌렀을 때
+        let currentZoneId = null;
+
+        function openZoneModal() {
+            document.getElementById("plusModal").style.display = "block";
+        }
+
+        //요청 수락 후 완료 버튼 눌렀을 때
+        function okRequest() {
+            document.getElementById('checkModal').style.display = "block";
+        }
+
+        function completeRequest(){
+            const imageInput = document.getElementById("checkInput");
+            if (imageInput.files.length > 0) {
+                // 첨부되었다면 모달 숨기기
+                document.getElementById('checkModal').style.display = "none";
+                alert("사진이 성공적으로 첨부되었습니다.");
+            }
+            else {
+                alert("사진을 첨부해주세요.");
+            }
+            document.getElementById('receivedPage').style.display = 'none';
+        }
+
+        function closeRequest() {
+            document.getElementById('checkModal').style.display = 'none';
+        }
+        
+        //요청 거절했을 때
+        function rejectRequest() {
+            document.getElementById('receivedPage').style.display = 'none';
         }
     </script>
 </body>
