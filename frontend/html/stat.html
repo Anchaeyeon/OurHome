@@ -3,6 +3,13 @@
 <head>
     <title></title>
     <style>
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -27,8 +34,52 @@
             transform: scale(0.8);
             transform-origin: top center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding-left: 24px;
+            padding-top: 20px;
         }
 
+        .square {
+            width: 344px;
+            height: 145px;
+            border-radius: 10px;
+            border: 2px solid #D9D9D9;
+            background: #FFF;
+        }
+
+        .circle {
+            width: 110px;
+            height: 110px;
+            background-color: #ffffff;
+            margin: 13px;
+            border-radius: 50%;
+            border: 3px solid #1C98ED;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .grade {
+            font-family: 'Pretendard-Regular';
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: -90px;
+            margin-left: 40px;
+        }
+
+        .name {
+            font-family: 'Pretendard-Regular';
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+            margin-top: -24px;
+            margin-left: 170px;
+        }
+
+        /* nav */
         .Nline {
             background: #ffffff;
             border-style: solid;
@@ -82,9 +133,13 @@
 
 <body>
     <div class="div">
+        <div class="square">
+            <div class="circle"></div>
+            <div class="grade">1위</div>
+            <div class="name">나</div>
+        </div>
 
-
-        <div class="Nline"> </div>
+        <div class="Nline"></div>
 
         <div class="bottom-nav">
             <a href="home.html">
