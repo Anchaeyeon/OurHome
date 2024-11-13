@@ -16,10 +16,25 @@ const db = new sqlite3.Database('group.db', (err) => {
 // 그룹 테이블 생성 (만약 없다면)
 db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS groups (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        image TEXT NOT NULL
-    )`);
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    image TEXT
+  )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS zones (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER,
+    name TEXT NOT NULL,
+    FOREIGN KEY (group_id) REFERENCES groups(id)
+  )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    zone_id INTEGER,
+    name TEXT NOT NULL,
+    completed INTEGER DEFAULT 0,
+    FOREIGN KEY (zone_id) REFERENCES zones(id)
+  )`);
 });
 
 // 미들웨어 설정
@@ -75,7 +90,7 @@ app.get('/', (req, res) => {
 });
 
 // 서버 시작
-const PORT = process.env.PORT || 3000; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
+const PORT = process.env.PORT || 3001; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
 app.listen(PORT, () => {
     console.log(`서버가 ${PORT}번 포트에서 실행 중입니다. http://localhost:${PORT}`);
 });

@@ -1,0 +1,63 @@
+{
+    "groups": [
+        {
+            "id": 1,
+            "name": "가족",
+            "image": "family_image_url",
+            "type": "family",
+            "zones": [
+                {
+                    "id": 1,
+                    "name": "주방",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "name": "설거지",
+                            "completed": false
+                        },
+                        {
+                            "id": 2,
+                            "name": "음식물 버리기",
+                            "completed": false
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "거실",
+                    "tasks": []
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "쉐어하우스 A",
+            "image": "sharehouse_image_url",
+            "type": "sharehouse",
+            "zones": [
+                {
+                    "id": 1,
+                    "name": "공동 주방",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "name": "청소",
+                            "completed": false
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "공동 거실",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "name": "청소",
+                            "completed": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
