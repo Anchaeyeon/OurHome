@@ -40,14 +40,19 @@ app.post('/join', (req, res) => {
             if (err) {
                 return res.send('회원가입 중 오류가 발생했습니다.');
             }
-            res.send('회원가입이 완료되었습니다.');
+            res.redirect('/login');  // 로그인 페이지로 이동
         });
     });
 });
 
 // 회원가입 페이지 띄우기
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'join.html')); // 올바른 경로 처리
+    res.sendFile(path.join(__dirname, 'public', 'join.html'));
+});
+
+// 로그인 페이지 띄우기
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 // 서버 실행
