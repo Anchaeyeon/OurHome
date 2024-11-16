@@ -17,7 +17,7 @@ app.post('/join', (req, res) => {
 
     // 비밀번호 확인
     if (userPW1 !== userPW2) {
-        return res.send('비밀번호가 일치하지 않습니다.');
+        return res.send('<script>alert("비밀번호가 일치하지 않습니다."); window.location.href = "/";</script>');
     }
 
     // 저장할 사용자 데이터
@@ -38,10 +38,35 @@ app.post('/join', (req, res) => {
         // 새로운 데이터로 users.json 파일에 덮어쓰기
         fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
             if (err) {
-                return res.send('회원가입 중 오류가 발생했습니다.');
+                return res.send('<script>alert("회원가입 중 오류가 발생했습니다."); window.location.href = "/";</script>');
             }
             res.redirect('/login');  // 로그인 페이지로 이동
         });
+    });
+});
+
+// 로그인 처리 라우트
+app.post('/login', (req, res) => {
+    const { userName, userPW } = req.body;
+    const usersFilePath = './users.json';
+
+    // 파일에서 사용자 데이터 읽기
+    fs.readFile(usersFilePath, 'utf-8', (err, data) => {
+        if (err) {
+            return res.send('<script>alert("로그인 중 오류가 발생했습니다."); window.location.href = "/";</script>');
+        }
+
+        // 기존 사용자 데이터 파싱
+        const users = JSON.parse(data);
+
+        // 사용자가 입력한 아이디와 비밀번호가 일치하는지 확인
+        const user = users.find(u => u.userName === userName && u.userPW === userPW);
+
+        if (user) {
+            res.redirect('/');
+        } else {
+            res.send('아이디 또는 비밀번호가 일치하지 않습니다.');
+        }
     });
 });
 
@@ -57,5 +82,5 @@ app.get('/login', (req, res) => {
 
 // 서버 실행
 app.listen(PORT, () => {
-    console.log(`서버가 http://localhost:${PORT} 실행 중입니다.`);
+    console.log(`서버가 http://localhost:${PORT} 실행 중`);
 });
