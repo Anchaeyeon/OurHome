@@ -6,7 +6,6 @@ const multer = require('multer');
 
 // bodyParser 미들웨어 사용 (클라이언트에서 JSON 형식으로 전송한 데이터를 파싱)
 
-
 // SQLite 데이터베이스 연결
 const db = new sqlite3.Database('group.db', (err) => {
     if (err) {
@@ -59,7 +58,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-
 // 그룹 추가 API
 app.post('/addGroup', upload.single('groupImage'), (req, res) => {
     const { groupName } = req.body;
@@ -77,7 +75,6 @@ app.post('/addGroup', upload.single('groupImage'), (req, res) => {
         res.status(200).json({ message: '그룹이 추가되었습니다.' });
     });
 });
-
 
 // 그룹 목록과 구역 목록 가져오기 API
 app.get('/groups', (req, res) => {
@@ -109,22 +106,35 @@ app.get('/groups', (req, res) => {
     });
 });
 
-//구역 추가 api
+// 구역 추가 API
 app.post('/addZone', (req, res) => {
     const { zoneName, groupName } = req.body;
 
+    // 구역 이름과 그룹 이름이 제공되지 않으면 에러 반환
     if (!zoneName || !groupName) {
-        return res.status(400).json({ message: '구역 이름과 그룹 ID를 모두 제공해야 합니다.' });
+        return res.status(400).json({ message: '구역 이름과 그룹 이름을 모두 제공해야 합니다.' });
     }
 
-    db.run('INSERT INTO zones (name, group_id) VALUES (?, ?)', [zoneName, groupName], (err) => {
+    // 그룹 이름으로 그룹 ID 찾기
+    db.get('SELECT id FROM groups WHERE name = ?', [groupName], (err, row) => {
         if (err) {
-            return res.status(500).json({ message: '서버 오류: 구역 추가 실패' });
+            return res.status(500).json({ message: '서버 오류: 그룹 조회 실패' });
         }
-        res.status(200).json({ message: `${zoneName} 구역이 추가되었습니다.` });
+        if (!row) {
+            return res.status(404).json({ message: '그룹을 찾을 수 없습니다.' });
+        }
+
+        const groupId = row.id;
+
+        // 구역 추가
+        db.run('INSERT INTO zones (name, group_id) VALUES (?, ?)', [zoneName, groupId], (err) => {
+            if (err) {
+                return res.status(500).json({ message: '서버 오류: 구역 추가 실패' });
+            }
+            res.status(200).json({ message: `${zoneName} 구역이 추가되었습니다.` });
+        });
     });
 });
-
 
 // 그룹 이름으로 구역 목록 가져오기 API
 app.get('/zones/:groupName', (req, res) => {
@@ -148,8 +158,6 @@ app.get('/zones/:groupName', (req, res) => {
         });
     });
 });
-
-
 
 // 기본 페이지 (main.html) 서빙
 app.get('/', (req, res) => {

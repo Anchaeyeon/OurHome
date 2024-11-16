@@ -63,9 +63,9 @@ app.post('/login', (req, res) => {
         const user = users.find(u => u.userName === userName && u.userPW === userPW);
 
         if (user) {
-            res.redirect('/');
+            res.redirect('/AddGroup');
         } else {
-            res.send('아이디 또는 비밀번호가 일치하지 않습니다.');
+            res.send('<script>alert("아이디 또는 비밀번호가 일치하지 않습니다."); window.location.href = "/login";</script>');
         }
     });
 });
@@ -78,6 +78,11 @@ app.get('/', (req, res) => {
 // 로그인 페이지 띄우기
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// 그룹 페이지 띄우기
+app.get('/AddGroup', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'Main.html'));
 });
 
 // 서버 실행
