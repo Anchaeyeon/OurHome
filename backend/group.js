@@ -124,39 +124,31 @@ app.post('/addZone', (req, res) => {
         res.status(200).json({ message: `${zoneName} 구역이 추가되었습니다.` });
     });
 });
- 
-//
-app.get('/zones', (req, res) => {
-    console.log('GET /zones 요청 수신:', req.query);
-    const groupName = req.query.groupName;
 
-    if (!groupName) {
-        return res.status(400).json({ message: '그룹 이름이 필요합니다.' });
-    }
 
-    // groupName을 이용해 그룹 ID를 찾기
-    db.get('SELECT id FROM groups WHERE name = ?', [groupName], (err, group) => {
+// 그룹 이름으로 구역 목록 가져오기 API
+app.get('/zones/:groupName', (req, res) => {
+    const groupName = req.params.groupName;
+
+    // 그룹 이름으로 그룹 ID를 찾기
+    db.get('SELECT * FROM groups WHERE name = ?', [groupName], (err, group) => {
         if (err) {
-            console.error('DB 조회 오류:', err);
             return res.status(500).json({ message: '서버 오류: 그룹 조회 실패' });
         }
-
         if (!group) {
             return res.status(404).json({ message: '그룹을 찾을 수 없습니다.' });
         }
 
-        // 그룹 ID로 구역 목록 조회
-        db.all('SELECT * FROM zones WHERE group_id = ?', [group.id], (err, rows) => {
+        // 그룹 ID를 사용해 해당 그룹의 구역 목록을 조회
+        db.all('SELECT * FROM zones WHERE group_id = ?', [group.id], (err, zones) => {
             if (err) {
-                console.error('DB 조회 오류:', err);
                 return res.status(500).json({ message: '서버 오류: 구역 목록 조회 실패' });
             }
-
-            console.log('조회된 구역 목록:', rows);
-            res.status(200).json({ zones: rows });
+            res.status(200).json({ zones });
         });
     });
 });
+
 
 
 // 기본 페이지 (main.html) 서빙
@@ -165,7 +157,7 @@ app.get('/', (req, res) => {
 });
 
 // 서버 시작
-const PORT = process.env.PORT || 3000; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
+const PORT = process.env.PORT || 3001; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
 app.listen(PORT, () => {
     console.log(`서버가 ${PORT}번 포트에서 실행 중입니다. http://localhost:${PORT}`);
 });
