@@ -216,7 +216,7 @@
         </div>
     </div>
 
-    <script>
+    <script>  //그룹추가 모달
         function openModal() {
             document.getElementById("myModal").style.display = "block";
         }
@@ -233,7 +233,7 @@
                 alert("그룹 이름과 사진을 모두 입력해주세요.");
                 return;
             }
-
+          //그룹 데이터 추가
             const formData = new FormData();
             formData.append('groupName', groupName);
             formData.append('groupImage', fileInput.files[0]);
@@ -297,8 +297,6 @@
                     console.log("그룹 목록을 불러오는 데 실패했습니다.", error);
                 });
         }
-
-
 
     </script>
 </body>
