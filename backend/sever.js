@@ -351,7 +351,7 @@ app.get('/login', (req, res) => {
 
 app.get('/AddGroup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Main.html'));
-});
+}); 
 
 // 서버 시작
 app.listen(PORT, () => {
