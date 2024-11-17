@@ -15,29 +15,54 @@ const db = new sqlite3.Database('group.db', (err) => {
     }
 });
 
-// 그룹 테이블 생성 (만약 없다면)
 db.serialize(() => {
+    // 그룹 테이블 생성 (만약 없다면)
     db.run(`CREATE TABLE IF NOT EXISTS groups (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    image TEXT
-  )`);
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        image TEXT
+    )`);
 
+    // 구역 테이블 생성 (만약 없다면)
     db.run(`CREATE TABLE IF NOT EXISTS zones (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    group_id INTEGER,
-    name TEXT NOT NULL,
-    FOREIGN KEY (group_id) REFERENCES groups(id)
-  )`);
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        group_id INTEGER,
+        name TEXT NOT NULL,
+        FOREIGN KEY (group_id) REFERENCES groups(id)
+    )`);
 
+    // 집안일 테이블 생성 (만약 없다면)
     db.run(`CREATE TABLE IF NOT EXISTS tasks (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    zone_id INTEGER,
-    name TEXT NOT NULL,
-    reward INTEGER DEFAULT 0,
-    completed INTEGER DEFAULT 0,
-    FOREIGN KEY (zone_id) REFERENCES zones(id)
-  )`);
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        zone_id INTEGER,
+        name TEXT NOT NULL,
+        reward INTEGER DEFAULT 0,
+        completed INTEGER DEFAULT 0,
+        FOREIGN KEY (zone_id) REFERENCES zones(id)
+    )`);
+
+    // 사용자 테이블 생성 (만약 없다면)
+    db.run(`CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        reward INTEGER DEFAULT 0
+    )`);
+
+    // 기본 사용자 "나" 추가 (만약 없다면)
+    db.get('SELECT id FROM users WHERE name = "나"', (err, row) => {
+        if (err) {
+            console.error('서버 오류: 사용자 조회 실패', err);
+        }
+        if (!row) {
+            db.run('INSERT INTO users (name) VALUES ("나")', (err) => {
+                if (err) {
+                    console.error('서버 오류: 기본 사용자 추가 실패', err);
+                } else {
+                    console.log('기본 사용자 "나"가 추가되었습니다.');
+                }
+            });
+        }
+    });
 });
 
 // 미들웨어 설정
@@ -208,13 +233,53 @@ app.get('/tasks/:zoneId', (req, res) => {
     });
 });
 
+// 집안일 삭제 API
+app.delete('/deleteTask/:taskId', (req, res) => {
+    const taskId = req.params.taskId;
+
+    // 해당 taskId를 가진 집안일을 삭제
+    db.run('DELETE FROM tasks WHERE id = ?', [taskId], (err) => {
+        if (err) {
+            return res.status(500).json({ message: '서버 오류: 집안일 삭제 실패' });
+        }
+        res.status(200).json({ message: '집안일이 삭제되었습니다.' });
+    });
+});
+
+// 리워드 업데이트 API
+app.post('/updateReward', (req, res) => {
+    const { userName, taskReward } = req.body;
+
+    // 사용자 이름으로 리워드 업데이트
+    db.get('SELECT reward FROM users WHERE name = ?', [userName], (err, row) => {
+        if (err) {
+            return res.status(500).json({ message: '서버 오류: 사용자 조회 실패' });
+        }
+        if (!row) {
+            return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+        }
+
+        // 기존 리워드에 추가
+        const newReward = row.reward + taskReward;
+
+        // 리워드 업데이트
+        db.run('UPDATE users SET reward = ? WHERE name = ?', [newReward, userName], (err) => {
+            if (err) {
+                return res.status(500).json({ message: '서버 오류: 리워드 업데이트 실패' });
+            }
+            res.status(200).json({ message: '리워드가 업데이트되었습니다.', newReward });
+        });
+    });
+});
+
+
 // 기본 페이지 (main.html) 서빙
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Main.html'));
 });
 
 // 서버 시작
-const PORT = process.env.PORT || 3001; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
+const PORT = process.env.PORT || 3003; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
 app.listen(PORT, () => {
     console.log(`서버가 ${PORT}번 포트에서 실행 중입니다. http://localhost:${PORT}`);
 });

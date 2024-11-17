@@ -545,54 +545,84 @@
     }
 
 
-        // 집안일 완료 함수
-        function completeTask(taskName, taskReward, currentTaskItem) {
-            const imageInput = document.getElementById("taskImageInput");
+   // 집안일 완료 함수
+    function completeTask(taskName, taskReward, currentTaskItem) {
+        const imageInput = document.getElementById("taskImageInput");
 
-            if (imageInput.files.length > 0) {
-                const imageFile = imageInput.files[0];
-                const reader = new FileReader();
+        if (imageInput.files.length > 0) {
+            const imageFile = imageInput.files[0];
+            const reader = new FileReader();
 
-                reader.onload = function (e) {
-                    const imageData = e.target.result;
+            reader.onload = function (e) {
+                const imageData = e.target.result;
 
-                    // 완료된 집안일 목록 가져오기 (로컬 스토리지)
-                    const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
+                // 로컬 스토리지에서 완료된 집안일 목록 가져오기
+                const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
 
-                    // 현재 구역 정보, 집안일 이름, 보상, 이미지 데이터를 저장
-                    completedTasks.push({
-                        groupName: currentGroupName,  // 그룹 이름 (전역 변수로 관리)
-                        zoneName: currentZoneName,   // 구역 이름 (전역 변수로 관리)
-                        taskName: taskName,
-                        taskReward: taskReward,
-                        imageData: imageData
-                    });
+                // 현재 구역 정보, 집안일 이름, 보상, 이미지 데이터를 저장
+                completedTasks.push({
+                    groupName: currentGroupName,  // 그룹 이름 (전역 변수로 관리)
+                    zoneName: currentZoneName,   // 구역 이름 (전역 변수로 관리)
+                    taskName: taskName,
+                    taskReward: taskReward,
+                    imageData: imageData
+                });
 
-                    // 로컬 스토리지에 저장
-                    localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
+                // 로컬 스토리지에 저장
+                localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
 
-                    // 완료 알림
-                    alert(`"${taskName}" 집안일이 완료되었습니다. 보상: ⭐ ${taskReward}개`);
+                // 완료 알림
+                alert(`"${taskName}" 집안일이 완료되었습니다. 보상: ⭐ ${taskReward}개`);
 
-                    // 콘솔에 완료 메시지 출력
-                    console.log(`${currentGroupName} 그룹에서 ${taskName} 집안일을 완료했습니다.`);
+                // 콘솔에 완료 메시지 출력
+                console.log(`${currentGroupName} 그룹에서 ${taskName} 집안일을 완료했습니다.`);
 
-                    // DOM에서 해당 집안일 항목 삭제
-                    currentTaskItem.remove();
+                // 데이터베이스에서 해당 집안일 삭제
+                deleteTaskFromDatabase(currentTaskItem.dataset.taskId);
 
-                    // 확인 창 닫기
-                    closeCheckTask();
-                };
-                reader.readAsDataURL(imageFile);  // 이미지 데이터를 base64로 변환
-            } else {
-                alert("이미지를 첨부하세요");
-            }
+                // 1. 완료된 집안일을 로컬스토리지로 이동
+                moveTaskToCompleted(currentTaskItem.dataset.taskId);
+
+                 updateUserReward(taskReward) // 유저 리워드
+
+                // 2. 화면에서 삭제 (DOM에서 해당 집안일 항목 삭제)
+                currentTaskItem.remove();
+
+                // 확인 창 닫기
+                closeCheckTask();
+            };
+            reader.readAsDataURL(imageFile);  // 이미지 데이터를 base64로 변환
+        } else {
+            alert("이미지를 첨부하세요");
         }
+    }
 
+    // 집안일을 데이터베이스에서 삭제하는 함수
+    function deleteTaskFromDatabase(taskId) {
+        fetch(`/deleteTask/${taskId}`, { method: 'DELETE' })
+            .then(response => response.json())
+            .then(data => {
+                console.log('집안일 삭제 완료:', data);
+            })
+            .catch(error => {
+                console.error('집안일 삭제 실패:', error);
+            });
+    }
 
-    // 집안일 추가 팝업창 닫기
-    function closeTask() {
-        document.getElementById("taskModal").style.display = "none";
+    // 완료된 집안일을 로컬스토리지로 이동하는 함수
+    function moveTaskToCompleted(taskId) {
+        const tasks = JSON.parse(localStorage.getItem("tasks")) || [];  // 로컬 스토리지에서 기존 집안일 목록 가져오기
+        const taskIndex = tasks.findIndex(task => task.id === taskId);
+
+        if (taskIndex !== -1) {
+            const completedTask = tasks.splice(taskIndex, 1)[0];  // 완료된 집안일을 제거하고
+            const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
+            completedTasks.push(completedTask);  // 완료된 집안일을 completedTasks에 추가
+
+            // 업데이트된 목록을 로컬스토리지에 다시 저장
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
+        }
     }
 
     // 구역 ID에 해당하는 집안일 목록을 불러오는 함수
@@ -610,6 +640,7 @@
                     const taskItem = document.createElement("li");
                     taskItem.className = "task-item";
                     taskItem.innerText = `${task.name} - 보상: ${task.reward}점`;
+                    taskItem.dataset.taskId = task.id;  // 집안일의 ID를 데이터셋에 저장
 
                     taskList.appendChild(taskItem);
 
@@ -708,6 +739,49 @@
         function goMain() {
             window.location.href = "Main.html";
         }
+
+                // localStorage 사용량 확인 및 초기화
+                    function checkStorageUsage() {
+                        let usedBytes = 0;
+
+                        for (let key in localStorage) {
+                            if (localStorage.hasOwnProperty(key)) {
+                                usedBytes += localStorage.getItem(key).length * 2; // 문자열의 길이 (UTF-16 기준)
+                            }
+                        }
+
+                        const usedKB = (usedBytes / 1024).toFixed(2); // 사용량 (KB)
+                        const maxStorageKB = 5120; // localStorage 최대 용량 (KB)
+                        const remainingKB = (maxStorageKB - usedKB).toFixed(2); // 남은 용량 (KB)
+
+                        console.log(`localStorage 사용량: ${usedKB} KB / ${maxStorageKB} KB`);
+                        console.log(`남은 용량: ${remainingKB} KB`);
+
+                        // 남은 용량이 500KB 이하이면 자동 초기화
+                        if (remainingKB <= 500) {
+                            localStorage.clear();
+                            console.log("localStorage가 초기화되었습니다.");
+                        }
+                    }
+
+                    // 사용자 리워드를 업데이트하는 함수
+function updateUserReward(taskReward) {
+    const userName = '나';  // 예시로 '사용자이름'을 사용합니다.
+
+    fetch('/updateReward', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName, taskReward })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('리워드 업데이트 완료:', data);
+        })
+        .catch(error => {
+            console.error('리워드 업데이트 실패:', error);
+        });
+}
+        
     </script>
 
 </body>
