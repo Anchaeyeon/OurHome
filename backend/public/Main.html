@@ -182,71 +182,89 @@
             font-size: 16px;
         }
 
-       #groupsContainer {
+        #groupsContainer {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start;
             margin-top: 100px;
-            overflow-y: auto; /* 스크롤 추가 */
-            max-height: 700px; /* 높이 조정 */
+            overflow-y: auto;
+            /* 스크롤 추가 */
+            max-height: 700px;
+            /* 높이 조정 */
         }
-  
+
         /* 스크롤바 숨기기 */
-       #groupsContainer::-webkit-scrollbar {
+        #groupsContainer::-webkit-scrollbar {
             display: none;
             /* 스크롤바 숨기기 */
         }
 
-        /* 완료된 집안일 모달 스타일 */
-        #completedTasksModal {
-            display: none;
-            position: fixed;
-            z-index: 2;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            overflow-y: auto; /* 스크롤 추가 */
-            max-height: 852px; /* 높이 조정 */
-        }
+       /* 완료된 집안일 모달 스타일 */
+#completedTasksModal {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    max-height: 852px; /* 높이 조정 */
+    padding: 20px; /* 여백 추가 */
+}
 
-        #completedTasksModal .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 400px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        }
+#completedTasksModal .modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 15px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
 
-        #completedTasksList {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+#completedTasksList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
-        .completed-task-item {
-            display: flex;
-            align-items: center;
-            background-color: #f9f9f9;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-        }
+/* 완료된 집안일 항목 스타일 */
+.completed-task-item {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 8px; /* 여백 축소 */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
 
-        .completed-task-info {
-            flex: 1;
-            margin-left: 10px;
-        }
+/* 텍스트 스타일 */
+.completed-task-info {
+    flex: 1;
+    margin-left: 8px;
+    font-size: 14px; /* 글씨 크기 축소 */
+    color: #333;
+    line-height: 1.2;
+}
 
-        .completed-task-image {
-            width: 60px;
-            height: 60px;
-            border-radius: 5px;
-            object-fit: cover;
-        }
+/* 이미지 스타일 */
+.completed-task-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+/* 제목 텍스트 스타일 */
+#completedTasksList h3 {
+    font-size: 14px; /* 글씨 크기 축소 */
+    font-weight: normal;
+    margin: 0;
+    color: #555;
+}
+
     </style>
 </head>
 
@@ -301,7 +319,7 @@
                 alert("그룹 이름과 사진을 모두 입력해주세요.");
                 return;
             }
-          //그룹 데이터 추가
+            //그룹 데이터 추가
             const formData = new FormData();
             formData.append('groupName', groupName);
             formData.append('groupImage', fileInput.files[0]);
@@ -331,7 +349,7 @@
         // 페이지 로드 시 그룹 목록 불러오기
         window.onload = loadGroups;
 
-    // 그룹 목록을 서버에서 가져와 화면에 표시하는 함수
+        // 그룹 목록을 서버에서 가져와 화면에 표시하는 함수
         function loadGroups() {
             fetch('/groups')
                 .then(response => response.json())
@@ -369,36 +387,39 @@
         }
 
 
-    function completedTasks() {
-        const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
-        const taskListElement = document.getElementById("completedTasksList"); // 수정된 부분
-        taskListElement.innerHTML = ""; // 기존 내용 지우기
+        function completedTasks() {
+            const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
+            const taskListElement = document.getElementById("completedTasksList");
+            taskListElement.innerHTML = ""; // 기존 내용 지우기
 
-        completedTasks.forEach(task => {
-            const taskItem = document.createElement("li");
-            taskItem.classList.add("completed-task-item"); // 수정된 부분
+            completedTasks.forEach(task => {
+                const taskItem = document.createElement("li");
+                taskItem.classList.add("completed-task-item");
 
-            const taskName = document.createElement("h3");
-            taskName.textContent = `${task.taskName} - 보상: ⭐ ${task.taskReward}개`;
+                // 그룹명과 집안일 이름을 포함한 텍스트
+                const taskName = document.createElement("h3");
+                taskName.textContent = `${task.groupName}에서 ${task.taskName} 집안일이 완료되었습니다 - 보상: ⭐ ${task.taskReward}개`;
 
-            const taskImage = document.createElement("img");
-            taskImage.src = task.imageData; // 로컬스토리지에서 가져온 이미지 데이터
-            taskImage.alt = `${task.taskName} 이미지`;
-            taskImage.classList.add("completed-task-image"); // 수정된 부분
+                // 이미지 요소 생성
+                const taskImage = document.createElement("img");
+                taskImage.src = task.imageData; // 로컬스토리지에서 가져온 이미지 데이터
+                taskImage.alt = `${task.taskName} 이미지`;
+                taskImage.classList.add("completed-task-image");
 
-            taskItem.appendChild(taskName);
-            taskItem.appendChild(taskImage);
+                // 요소 추가
+                taskItem.appendChild(taskName);
+                taskItem.appendChild(taskImage);
+                taskListElement.appendChild(taskItem);
+            });
 
-            taskListElement.appendChild(taskItem);
-        });
+            // modal 보이기 설정
+            document.getElementById("completedTasksModal").style.display = "block";
+        }
 
-        // modal 보이기 설정
-        document.getElementById("completedTasksModal").style.display = "block"; // modal 보이기
-    }
 
-   function closeCompletedTasksModal() {
-        document.getElementById("completedTasksModal").style.display = "none"; // 모달 닫기
-    }
+        function closeCompletedTasksModal() {
+            document.getElementById("completedTasksModal").style.display = "none"; // 모달 닫기
+        }
 
     </script>
 </body>
