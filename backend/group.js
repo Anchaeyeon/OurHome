@@ -3,6 +3,7 @@ const app = express();
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const multer = require('multer');
+const fs = require('fs'); // 추가된 코드
 
 // bodyParser 미들웨어 사용 (클라이언트에서 JSON 형식으로 전송한 데이터를 파싱)
 
@@ -65,70 +66,51 @@ db.serialize(() => {
     });
 });
 
-// 미들웨어 설정
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// 'uploads' 폴더 생성 (없을 경우)
+if (!fs.existsSync('uploads')) {
+    fs.mkdirSync('uploads');
+}
 
-// 정적 파일을 서빙하기 위해 public 디렉토리를 설정
+// 정적 파일 서빙
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// 파일 업로드 설정 (multer 사용)
+// 파일 업로드 설정
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // 업로드된 파일을 'uploads' 폴더에 저장
+        cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // 파일 이름에 타임스탬프 추가
+        cb(null, Date.now() + path.extname(file.originalname));
     },
 });
 
 const upload = multer({ storage: storage });
 
+// JSON 파싱 설정
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // 그룹 추가 API
 app.post('/addGroup', upload.single('groupImage'), (req, res) => {
-    const { groupName } = req.body;
-    const groupImage = req.file ? `/uploads/${req.file.filename}` : ''; // 이미지 파일 경로
+    const groupName = req.body.groupName;
+    const imagePath = `/uploads/${req.file.filename}`;
 
-    if (!groupName || !groupImage) {
-        return res.status(400).json({ message: '그룹 이름과 사진을 모두 제공해야 합니다.' });
-    }
-
-    // 그룹 데이터를 그룹 테이블에 저장
-    db.run('INSERT INTO groups (name, image) VALUES (?, ?)', [groupName, groupImage], (err) => {
+    db.run(`INSERT INTO groups (name, image) VALUES (?, ?)`, [groupName, imagePath], (err) => {
         if (err) {
-            return res.status(500).json({ message: '서버 오류: 그룹 추가 실패' });
+            return res.status(500).json({ message: '그룹 추가 실패' });
         }
         res.status(200).json({ message: '그룹이 추가되었습니다.' });
     });
 });
 
-// 그룹 목록과 구역 목록 가져오기 API
+// 그룹 목록 조회 API
 app.get('/groups', (req, res) => {
     db.all('SELECT * FROM groups', [], (err, groups) => {
         if (err) {
-            return res.status(500).json({ message: '서버 오류: 그룹 목록 조회 실패' });
+            return res.status(500).json({ message: '그룹 목록 조회 실패' });
         }
-
-        // Fetch zones for each group
-        const groupIds = groups.map(group => group.id); // Collect all group IDs
-        const query = `SELECT * FROM zones WHERE group_id IN (${groupIds.join(',')})`;
-
-        db.all(query, [], (err, zones) => {
-            if (err) {
-                return res.status(500).json({ message: '서버 오류: 구역 목록 조회 실패' });
-            }
-
-            // Group zones by groupId
-            const groupsWithZones = groups.map(group => {
-                const groupZones = zones.filter(zone => zone.group_id === group.id);
-                return {
-                    ...group,
-                    zones: groupZones  // Add zones to the group object
-                };
-            });
-
-            res.status(200).json({ groups: groupsWithZones });
-        });
+        res.status(200).json({ groups });
     });
 });
 
@@ -297,7 +279,7 @@ app.get('/', (req, res) => {
 });
 
 // 서버 시작
-const PORT = process.env.PORT || 3001; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
+const PORT = process.env.PORT || 3000; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
 app.listen(PORT, () => {
     console.log(`서버가 ${PORT}번 포트에서 실행 중입니다. http://localhost:${PORT}`);
 });
