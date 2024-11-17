@@ -345,14 +345,15 @@
             </div>
         </div>
 
-        <div id="checkTask" class="modal">
-            <div class="modal-content">
-                <img src="img/xBtn.png" class="close" onclick="closeCheckTask()" alt="닫기 버튼">
-                <h2>인증 사진 첨부</h2>
-                <input type="file" class="file-upload" accept="image/*" id="taskImageInput">
-                <button class="add-button" id="completeButtton" onclick="completeTask()">완료</button>
-            </div>
+    <div id="checkTask" class="modal">
+        <div class="modal-content">
+            <img src="img/xBtn.png" class="close" onclick="closeCheckTask()" alt="닫기 버튼">
+            <h2>인증 사진 첨부</h2>
+            <input type="file" class="file-upload" accept="image/*" id="taskImageInput">
+            <button class="add-button" id="completeButton" onclick="completeTask()">완료</button> <!-- 수정된 ID -->
         </div>
+    </div>
+
 
     </div>
     <script>
@@ -519,61 +520,75 @@
                 .catch(error => console.error('집안일 추가 실패:', error));
         }
 
- 
+   
+    // 집안일 항목 클릭 시 체크 모달을 여는 함수
+  function checkTask(taskName, taskReward, currentTaskItem) {
+        console.log('checkTask 함수 호출됨');
 
-    // 집안일 완료 함수
-    function completeTask(taskName, taskReward, currentTaskItem) {
-        const imageInput = document.getElementById("taskImageInput");
-
-        if (imageInput.files.length > 0) {
-            const imageFile = imageInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const imageData = e.target.result;
-
-                // 완료된 집안일 목록 가져오기 (로컬 스토리지)
-                const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
-
-                // 현재 구역 정보, 집안일 이름, 보상, 이미지 데이터를 저장
-                completedTasks.push({
-                    groupName: currentGroupName,  // 그룹 이름 (전역 변수로 관리)
-                    zoneName: currentZoneName,   // 구역 이름 (전역 변수로 관리)
-                    taskName: taskName,
-                    taskReward: taskReward,
-                    imageData: imageData
-                });
-
-                // 로컬 스토리지에 저장
-                localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
-
-                // 완료 알림
-                alert(`"${taskName}" 집안일이 완료되었습니다. 보상: ⭐ ${taskReward}개`);
-
-                // 콘솔에 완료 메시지 출력
-                console.log(`${currentGroupName} 그룹에서 ${taskName} 집안일을 완료했습니다.`);
-
-                // DOM에서 해당 집안일 항목 삭제
-                currentTaskItem.remove();
-
-                // 확인 창 닫기
-                closeCheckTask();
-            };
-            reader.readAsDataURL(imageFile);  // 이미지 데이터를 base64로 변환
+        const checkTaskModal = document.getElementById("checkTask");
+        if (checkTaskModal) {
+            checkTaskModal.style.display = 'block';
         } else {
-            alert("이미지를 첨부하세요");
+            console.error('checkTask 모달을 찾을 수 없습니다.');
+        }
+
+        const completeButton = document.getElementById("completeButton");
+        console.log('completeButton 존재 여부:', completeButton); // 추가된 로그
+
+        if (completeButton) {
+            completeButton.onclick = function () {
+                completeTask(taskName, taskReward, currentTaskItem);
+            };
+        } else {
+            console.error('completeButton 요소를 찾을 수 없습니다.');
         }
     }
 
-    // 집안일 항목 클릭 시 체크 모달을 여는 함수
-    function checkTask(taskName, taskReward, currentTaskItem) {
-        document.getElementById("checkTask").style.display = 'block';
 
-        // 완료 버튼 클릭 시 `completeTask` 함수 호출
-        document.getElementById("completeButton").onclick = function () {
-            completeTask(taskName, taskReward, currentTaskItem);
-        };
-    }
+        // 집안일 완료 함수
+        function completeTask(taskName, taskReward, currentTaskItem) {
+            const imageInput = document.getElementById("taskImageInput");
+
+            if (imageInput.files.length > 0) {
+                const imageFile = imageInput.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imageData = e.target.result;
+
+                    // 완료된 집안일 목록 가져오기 (로컬 스토리지)
+                    const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
+
+                    // 현재 구역 정보, 집안일 이름, 보상, 이미지 데이터를 저장
+                    completedTasks.push({
+                        groupName: currentGroupName,  // 그룹 이름 (전역 변수로 관리)
+                        zoneName: currentZoneName,   // 구역 이름 (전역 변수로 관리)
+                        taskName: taskName,
+                        taskReward: taskReward,
+                        imageData: imageData
+                    });
+
+                    // 로컬 스토리지에 저장
+                    localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
+
+                    // 완료 알림
+                    alert(`"${taskName}" 집안일이 완료되었습니다. 보상: ⭐ ${taskReward}개`);
+
+                    // 콘솔에 완료 메시지 출력
+                    console.log(`${currentGroupName} 그룹에서 ${taskName} 집안일을 완료했습니다.`);
+
+                    // DOM에서 해당 집안일 항목 삭제
+                    currentTaskItem.remove();
+
+                    // 확인 창 닫기
+                    closeCheckTask();
+                };
+                reader.readAsDataURL(imageFile);  // 이미지 데이터를 base64로 변환
+            } else {
+                alert("이미지를 첨부하세요");
+            }
+        }
+
 
     // 집안일 추가 팝업창 닫기
     function closeTask() {
