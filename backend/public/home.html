@@ -328,7 +328,7 @@
                 <p>완료해야 할 집안일</p>
                 <input type="text" id="taskName">
                 <p>보상</p>
-                <input type="number" name="taskReward" min="1" max="10" value="1">
+                <input type="number" name="taskReward" id="taskReward" min="1" max="10" value="1">
                 <button class="addTask" onclick="addTask()">추가</button>
             </div>
         </div>
@@ -380,7 +380,7 @@
             const groupName = document.getElementById('groupNameHeader').innerText;
 
             if (!zoneName || !groupName) {
-                alert('구역 이름과 그룹 이름을 모두 입력하세요!');
+                alert('구역 이름과 잡언알 이름을 모두 입력하세요!');
                 return;
             }
 
@@ -460,72 +460,87 @@
                 });
         }
 
-     // 구역을 선택하는 함수
-        function selectZone(zoneId) {
-            currentZoneId = zoneId;  // 선택된 구역 ID 저장
-            alert(`선택한 구역: ${zoneId}`);
+        let currentZoneName = null;  // 구역 이름을 저장할 전역 변수 추가
+
+    // 구역 클릭 시 구역 이름과 ID 저장 후 팝업 열기
+        function openTask(zoneId) {
+            currentZoneId = zoneId; // 현재 구역 ID 저장
+
+            // 현재 구역 이름을 zoneId에서 찾음
+            const zoneDiv = document.getElementById(zoneId);
+            currentZoneName = zoneDiv.querySelector('.zone-title').innerText;  // 구역 이름을 저장
+
+            console.log("현재 구역 이름:", currentZoneName);  // 콘솔에 구역 이름이 제대로 나오는지 확인
+
+            // 구역에 대한 집안일을 가져옴
+            fetch(`/tasks/${zoneId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.tasks) {
+                        displayTasks(data.tasks); // 집안일 표시 함수 호출
+                    } else {
+                        alert('이 구역에는 집안일이 없습니다.');
+                    }
+                })
+                .catch(error => console.error('집안일 불러오기 실패:', error));
+
+            document.getElementById("taskModal").style.display = "block";
+        }
+
+        // 집안일 목록을 표시하는 함수
+        function displayTasks(tasks) {
+            const taskListContainer = document.getElementById('taskListContainer'); // 구역 내 집안일을 표시할 요소
+
+            // 기존 집안일 목록 초기화
+            taskListContainer.innerHTML = '';
+
+            tasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.classList.add('task-item');
+
+                taskElement.innerHTML = `
+            <h4>${task.name}</h4>
+            <p>리워드: ${task.reward} 포인트</p>
+            <p>완료 여부: ${task.completed === 1 ? '완료' : '미완료'}</p>
+        `;
+
+                taskListContainer.appendChild(taskElement);
+            });
         }
 
         // 집안일 추가 함수
         function addTask() {
-            const taskName = document.getElementById("taskName").value.trim();
-            const taskReward = document.getElementById("taskReward").value;
+            const taskName = document.getElementById('taskName').value;
+            const taskReward = document.getElementById('taskReward').value;
+            const completeTask = 0;
 
-            if (taskName === '') {
-                alert("집안일을 입력해주세요.");
+           // console.log(currentZoneName)
+
+            if (!currentZoneName || !taskName) {  // currentZoneName을 사용하도록 수정
+                alert('구역 이름과 집안일 이름을 모두 입력하세요!');
                 return;
             }
 
-            if (taskReward === '' || taskReward <= 0) {
-                alert("유효한 보상 값을 입력해주세요.");
-                return;
-            }
-
-            if (!currentZoneId) {
-                alert("구역을 먼저 선택해주세요.");
-                return;
-            }
-
-            // 선택된 구역에 집안일 추가
-            const taskList = document.getElementById(`${currentZoneId}-tasks`);
-            if (!taskList) {
-                const newTaskList = document.createElement('ul');
-                newTaskList.id = `${currentZoneId}-tasks`;
-                document.getElementById(currentZoneId).appendChild(newTaskList);
-            }
-
-            const taskItem = document.createElement("li");
-            taskItem.className = "task-item";
-            taskItem.innerText = taskName;
-            taskItem.dataset.reward = taskReward; // 보상 값을 데이터 속성으로 저장
-
-            // 보상 표시 기능 추가
-            taskItem.onmouseover = () => {
-                taskItem.title = `보상: ⭐ ${taskReward}개`;
-            };
-
-            taskItem.onclick = () => checkTask(taskItem);
-
-            // 구역의 집안일 리스트에 추가
-            document.getElementById(`${currentZoneId}-tasks`).appendChild(taskItem);
-
-            // 입력 필드 초기화
-            document.getElementById("taskName").value = '';
-            document.getElementById("taskReward").value = '1';
+            fetch('/addTask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    zoneName: currentZoneName,  // 현재 구역 이름을 사용
+                    taskName,
+                    taskReward,
+                    completeTask
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    closeTask();
+                    console.log(data);
+                })
+                .catch(error => console.error('집안일 추가 실패:', error));
         }
 
-        // 집안일 완료 체크 함수 (예시)
-        function checkTask(taskItem) {
-            taskItem.style.textDecoration = 'line-through'; // 완료된 작업에 취소선
-            alert(`${taskItem.innerText} 작업이 완료되었습니다.`);
-        }
- 
-        // 집안일 추가 팝업창 열기
-        function openTask(zoneId) {
-            currentZoneId = zoneId; // 현재 구역 ID 저장
-            document.getElementById("taskModal").style.display = "block";
 
-        }
         // 집안일 추가 팝업창 닫기
         function closeTask() {
             document.getElementById("taskModal").style.display = "none";

@@ -34,6 +34,7 @@ db.serialize(() => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     zone_id INTEGER,
     name TEXT NOT NULL,
+    reward INTEGER DEFAULT 0,
     completed INTEGER DEFAULT 0,
     FOREIGN KEY (zone_id) REFERENCES zones(id)
   )`);
@@ -159,13 +160,61 @@ app.get('/zones/:groupName', (req, res) => {
     });
 });
 
+// 집안일 추가 API
+app.post('/addTask', (req, res) => {
+    const { zoneName, taskName, taskReward, completeTask } = req.body;
+
+    // 구역 이름과 집안일 이름이 제공되지 않으면 에러 반환
+    if (!zoneName || !taskName) {
+        return res.status(400).json({ message: '구역 이름과 집안일 이름을 모두 제공해야 합니다.' });
+    }
+
+    // 구역 이름으로 구역 ID 찾기
+    db.get('SELECT id FROM zones WHERE name = ?', [zoneName], (err, row) => {
+        if (err) {
+            return res.status(500).json({ message: '서버 오류: 구역 조회 실패' });
+        }
+        if (!row) {
+            return res.status(404).json({ message: '구역을 찾을 수 없습니다.' });
+        }
+
+        const zoneId = row.id;
+
+        // 집안일 추가
+        db.run('INSERT INTO tasks (name, reward, completed, zone_id) VALUES (?, ?, ?, ?)', [taskName, taskReward, completeTask, zoneId], (err) => {
+            if (err) {
+                return res.status(500).json({ message: '서버 오류: 집안일 추가 실패', error: err.message });
+            }
+            res.status(200).json({ message: `${zoneName}에 ${taskName} 집안일이 추가되었습니다. 보상:${taskReward}` });
+        });
+    });
+});
+
+// 구역에 해당하는 집안일 불러오기 API
+app.get('/tasks/:zoneId', (req, res) => {
+    const zoneId = req.params.zoneId;
+
+    // 해당 구역 ID에 해당하는 집안일을 가져옴
+    db.all('SELECT id, name, reward, completed FROM tasks WHERE zone_id = ?', [zoneId], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ message: '서버 오류: 집안일 조회 실패' });
+        }
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: '집안일이 없습니다.' });
+        }
+
+        res.status(200).json({ tasks: rows });
+    });
+});
+
 // 기본 페이지 (main.html) 서빙
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Main.html'));
 });
 
 // 서버 시작
-const PORT = process.env.PORT || 3001; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
+const PORT = process.env.PORT || 3000; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
 app.listen(PORT, () => {
     console.log(`서버가 ${PORT}번 포트에서 실행 중입니다. http://localhost:${PORT}`);
 });
