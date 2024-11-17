@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <style>
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .div {
+            background: #ffffff;
+            width: 393px;
+            height: 850px;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.8);
+            transform-origin: top center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding-left: 24px;
+            padding-top: 20px;
+        }
+
+        .square {
+            width: 344px;
+            height: 145px;
+            border-radius: 10px;
+            border: 2px solid #D9D9D9;
+            background: #FFF;
+        }
+
+        .circle {
+            width: 110px;
+            height: 110px;
+            background-color: #ffffff;
+            margin: 13px;
+            border-radius: 50%;
+            border: 3px solid #1C98ED;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .grade {
+            font-family: 'Pretendard-Regular';
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: -90px;
+            margin-left: 40px;
+        }
+
+        .name {
+            font-family: 'Pretendard-Regular';
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+            margin-top: -24px;
+            margin-left: 170px;
+        }
+
+        .Totalreward {
+             font-family: 'Pretendard-Regular';
+             margin-left: 150px;
+             margin-top: 15px;
+            font-size: 25px;
+            font-weight: 600;
+            text-align: center;
+            color: #1C98ED;
+        }
+        /* nav */
+        .Nline {
+            background: #ffffff;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.30);
+            border-width: 1px;
+            width: 403px;
+            height: 81px;
+            position: absolute;
+            left: -5px;
+            top: 773px;
+        }
+
+        .home {
+            width: 47px;
+            height: 47px;
+            position: absolute;
+            left: 50px;
+            top: 789px;
+            overflow: visible;
+        }
+
+        .stat {
+            width: 8.9%;
+            height: 4.07%;
+            position: absolute;
+            right: 15.2%;
+            left: 75.9%;
+            bottom: 2.62%;
+            top: 93.31%;
+            overflow: visible;
+        }
+
+        .request {
+            width: 9.37%;
+            height: 4.28%;
+            position: absolute;
+            right: 45.34%;
+            left: 45.29%;
+            bottom: 2.53%;
+            top: 93.19%;
+            overflow: visible;
+        }
+
+        /* 새로 추가된 스타일 */
+        .page-content {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="div">
+        <div class="square">
+            <div class="circle"></div>
+            <div class="grade">1위</div>
+            <div class="name">나</div>
+            <div class="Totalreward" id="totalReward">점</div> <!-- 여기에 리워드 표시 -->
+        </div>
+
+        <div class="Nline"></div>
+
+        <div class="bottom-nav">
+         
+                <img src="img/home-nav.png" class="home" id="homeButton">
+           
+            <a href="request.html">
+                <img src="img/request-nav.png" class="request">
+            </a>
+            <a href="stat.html">
+                <img src="img/status-nav.png" class="stat">
+            </a>
+        </div>
+<script>
+ // 홈 버튼 클릭 시 그룹을 URL에 유지하도록 처리
+    document.getElementById("homeButton").addEventListener("click", () => {
+        const groupName = sessionStorage.getItem("selectedGroupName");
+        const groupId = sessionStorage.getItem("selectedGroupId");
+
+        if (groupName && groupId) {
+            // 그룹 정보가 있다면 URL 파라미터에 추가하여 홈 페이지로 이동
+            window.location.href = `home.html?groupName=${encodeURIComponent(groupName)}&groupId=${encodeURIComponent(groupId)}`;
+        } else {
+            // 그룹 정보가 없다면 기본 페이지로 이동
+            window.location.href = "home.html";
+        }
+    });
+
+
+    // 페이지 로드 시 리워드 가져오기
+    window.onload = function () {
+        fetch('/getReward/나')  // '나'라는 사용자에 대한 리워드 가져오기
+            .then(response => response.json())
+            .then(data => {
+                if (data.reward !== undefined) {
+                    // Totalreward 요소에 리워드 표시
+                    document.querySelector('.Totalreward').textContent = `${data.reward}점`;
+                } else {
+                    console.error('리워드를 가져오는 데 실패했습니다.');
+                }
+            })
+            .catch(error => console.error('서버와 연결 실패:', error));
+    }
+    
+</script>
+
+
+
+</body>
+
+</html>
