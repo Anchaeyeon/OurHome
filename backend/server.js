@@ -130,7 +130,7 @@ app.post('/join', (req, res) => {
             if (err) {
                 return res.send('<script>alert("회원가입 중 오류가 발생했습니다."); window.location.href = "/";</script>');
             }
-            res.redirect('/login');
+            res.redirect('/');
         });
     });
 });
