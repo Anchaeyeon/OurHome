@@ -94,18 +94,10 @@
         padding-top: 24px;
         }
 
-        .toRequest:hover {
-            background-color: #1C98ED;
-        }
-
-        .toRequest:active {
-            background-color: #1C98ED;
-        }
-
         .toRequest {
             font-family: 'Pretendard-Regular';
             font-weight: 500;
-            background-color: #BFE4F9;
+            background-color:  #1C98ED;;
             border-radius: 10px;
             width: 150px;
             height: 50px;
@@ -114,18 +106,10 @@
             font-size: 17px;
         }
 
-        .getRequest:hover {
-            background-color: #1C98ED;
-        }
-
-        .getRequest:active {
-            background-color: #1C98ED;
-        }
-
         .getRequest {
             font-family: 'Pretendard-Regular';
             font-weight: 500;
-            background-color: #BFE4F9;
+            background-color:  #1C98ED;;
             border-radius: 10px;
             width: 150px;
             height: 50px;
@@ -212,6 +196,11 @@
             position: absolute;
             left: -5px;
             top: 773px;
+        }
+
+        .circleContainer{
+            overflow-y: auto; /* 스크롤 추가 */
+            height: 550px; /* 높이 조정 */
         }
           /* 내 프로필 */
         .circle-container1 {
@@ -474,14 +463,14 @@
         <div id="requestPage" class="content active">
             <h2>요청하기 화면</h2>
             <p>여기에 요청하기 내용을 입력하세요.</p>
-
+        <div class="circleContainer" >
             <div class="circle-container1" id="profile1"> <!-- 내 프로필 띄우기 -->
                 <div class="circle-container2">
                     <div id="circle1" class="circle" onclick="document.getElementById('file-input').click();"></div>
                     <input type="file" id="file-input" accept="image/*" onchange="displayImage(event)">
                     <div class="name">나</div>
                 </div>
-            </div>
+          </div>  </div>
 
             <div id="missionListContainer">
                 <ul id="missionList"></ul>
@@ -554,66 +543,48 @@
         </div>
     </div>
 
-    <script>
+   
+<script>
+
         // 화면 전환 함수
-        function showContent(contentId) {
-            // 모든 콘텐츠 숨기기
-            document.querySelectorAll('.content').forEach((content) => {
-                content.classList.remove('active');
-            });
+            function showContent(contentId) {
+                // 모든 콘텐츠 숨기기
+                document.querySelectorAll('.content').forEach((content) => {
+                    content.classList.remove('active');
+                });
 
-            // 클릭한 버튼에 해당하는 콘텐츠만 표시
-            document.getElementById(contentId).classList.add('active');
-        }
-    
-
-        //요청하기
-        function showContent(contentId) {
-            document.querySelectorAll('.content').forEach((content) => {
-                content.style.display = 'none';
-            });
-            document.getElementById(contentId).style.display = 'block';
-        }
-
-        function displayImage(event) {
-            const circle = document.getElementById('circle1');
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    circle.style.backgroundImage = `url(${e.target.result})`;
-                };
-                reader.readAsDataURL(file);
+                // 클릭한 버튼에 해당하는 콘텐츠만 표시
+                document.getElementById(contentId).classList.add('active');
             }
-        }
-
-        // 모달 열기
-        function openRequestModal() {
-            document.getElementById('RequestModal').style.display = 'flex';
-        }
-
-        // 모달 닫기
-        function RequestcloseModal() {
-            document.getElementById('RequestModal').style.display = 'none';
-        }
-        function AddMemberclose() {
-            document.getElementById('addMemberModal').style.display = 'none';
-        }
 
 
-        // plus 눌렀을 때
-        let currentZoneId = null;
+            //요청하기
+            function showContent(contentId) {
+                document.querySelectorAll('.content').forEach((content) => {
+                    content.style.display = 'none';
+                });
+                document.getElementById(contentId).style.display = 'block';
+            }
 
-        function openMemberAdd() {
-            document.getElementById("addMemberModal").style.display = "block";
-        }
+            function displayImage(event) {
+                const circle = document.getElementById('circle1');
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        circle.style.backgroundImage = `url(${e.target.result})`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
 
+    
         //요청 수락 후 완료 버튼 눌렀을 때
         function okRequest() {
             document.getElementById('checkModal').style.display = "block";
         }
 
-        function completeRequest(){
+        function completeRequest() {
             const imageInput = document.getElementById("checkInput");
             if (imageInput.files.length > 0) {
                 // 첨부되었다면 모달 숨기기
@@ -629,83 +600,112 @@
         function closeRequest() {
             document.getElementById('checkModal').style.display = 'none';
         }
-        
-        // 그룹원추가 완료   
-        function completePlus() {
-            var name = document.getElementById('plus-name').value;
-            if (name.trim() === '') {
-                alert('이름을 입력해주세요');
-                return;
+
+           //요청 거절했을 때
+            function rejectRequest() {
+                document.getElementById('receivedRequest').style.display = 'none';
             }
 
-            // 동그라미와 이름을 담을 새로운 div 요소 생성
-            var circleContainer2 = document.createElement('div');
-            circleContainer2.classList.add('circle-container2');
+    // 현재 선택된 사용자 ID를 저장
+    let currentUserId = null;
 
-            var circle = document.createElement('div');
-            circle.classList.add('circle');
+    // 사용자 추가 모달 열기 함수 정의
+            function openMemberAdd() {
+        const addMemberModal = document.getElementById('addMemberModal');
+            addMemberModal.style.display = 'block';
+    }
 
-            circle.onclick = function() {
-                document.getElementById('RequestModal').style.display = 'block';
-            };
-
-            var nameDiv = document.createElement('div');
-            nameDiv.classList.add('name');
-            nameDiv.textContent = name; // 입력된 이름을 텍스트로 추가
-
-            // 동그라미와 이름을 각각 새로운 div에 추가
-            circleContainer2.appendChild(circle);
-            circleContainer2.appendChild(nameDiv);
-
-            // 동적으로 추가된 요소를 circle-container1에 추가
-            document.getElementById('profile1').appendChild(circleContainer2);
-
-            // 모달 닫기
-            AddMemberclose();
-
-            // 입력 필드 초기화
-            document.getElementById('plus-name').value = '';
+    // 사용자 추가 완료
+    function completePlus() {
+        const name = document.getElementById('plus-name').value;
+        if (name.trim() === '') {
+            alert('이름을 입력해주세요');
+            return;
         }
 
-        function AddMemberclose() {
-            // 멤버 추가 모달 
-            document.getElementById('addMemberModal').style.display = 'none';
+        // 사용자마다 고유한 ID 생성
+        const userId = `user-${Date.now()}`;
+
+        // 사용자 프로필 컨테이너 생성
+        const circleContainer2 = document.createElement('div');
+        circleContainer2.classList.add('circle-container2');
+        circleContainer2.id = userId;
+
+        // 프로필 아이콘 생성
+        const circle = document.createElement('div');
+        circle.classList.add('circle');
+
+        // 프로필 클릭 시 요청 모달 열기
+        circle.onclick = function () {
+            currentUserId = userId;
+            document.getElementById('RequestModal').style.display = 'block';
+        };
+
+        // 사용자 이름 생성
+        const nameDiv = document.createElement('div');
+        nameDiv.classList.add('name');
+        nameDiv.textContent = name;
+
+        // 요청 목록 표시 영역 생성
+        const requestList = document.createElement('ul');
+        requestList.classList.add('request-list');
+        requestList.id = `${userId}-requests`;
+
+        // 요소 추가
+        circleContainer2.appendChild(circle);
+        circleContainer2.appendChild(nameDiv);
+        circleContainer2.appendChild(requestList);
+
+        // 프로필에 추가
+        document.getElementById('profile1').appendChild(circleContainer2);
+
+        // 모달 닫기
+        AddMemberclose();
+
+        // 입력 필드 초기화
+        document.getElementById('plus-name').value = '';
+    }
+
+    // 요청 모달 닫기
+    function RequestcloseModal() {
+        document.getElementById('RequestModal').style.display = 'none';
+    }
+
+    // 요청 완료
+    function completeMission() {
+        const missionName = document.getElementById('MissionName').value;
+        if (missionName.trim() === '') {
+            alert('요청할 미션을 입력해주세요');
+            return;
         }
 
-        //요청 거절했을 때
-        function rejectRequest() {
-            document.getElementById('receivedRequest').style.display = 'none';
+        // 현재 선택된 사용자의 요청 목록을 찾음
+        const requestList = document.getElementById(`${currentUserId}-requests`);
+        if (!requestList) {
+            alert('요청할 사용자를 선택해주세요.');
+            return;
         }
 
-        //미션 요청 완료했을 때
-        function completeMission() {
-            var name = document.getElementById('MissionName').value;
-            if (name.trim() === '') {
-                alert('요청할 미션을 입력해주세요');
-                return;
-            }
+        // 요청 항목 생성
+        const newRequestItem = document.createElement('li');
+        newRequestItem.textContent = missionName;
 
-            // 미션을 요청한 목록에 추가
-            var missionList = document.getElementById('missionList');
-            
-            // 새로운 미션 항목 생성
-            var newMissionItem = document.createElement('li');
-            newMissionItem.textContent = name;  // 미션 이름을 텍스트로 추가
-            
-            // 요청한 미션 목록에 추가
-            missionList.appendChild(newMissionItem);
+        // 요청 항목 추가
+        requestList.appendChild(newRequestItem);
 
-            // 입력 필드 초기화
-            document.getElementById('MissionName').value = '';
+        // 입력 필드 초기화
+        document.getElementById('MissionName').value = '';
 
-            // 모달 닫기
-            RequestcloseModal();
-        }
+        // 모달 닫기
+        RequestcloseModal();
+    }
 
-        function RequestcloseModal() {
-            document.getElementById('RequestModal').style.display = 'none';
-        }
-    </script>
+    // 사용자 추가 모달 닫기
+    function AddMemberclose() {
+        document.getElementById('addMemberModal').style.display = 'none';
+    }
+</script>
+
 </body>
 
 </html>
