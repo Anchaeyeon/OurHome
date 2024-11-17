@@ -277,7 +277,8 @@
             margin-top: 10px;
             width: 100%;
             overflow-y: auto;
-            /* 스크롤 추가 */
+            /*
+             스크롤 추가 */
         }
 
         .zone-title {
@@ -294,6 +295,24 @@
             font-size: 16px;
             color: #333;
         }
+
+          /* 집안일 완료 버튼*/
+        .completeTask {
+            display: block;
+            width: 50%;
+            padding: 12px;
+            background-color: #1C98ED;
+            color: white;
+            font-size: 1em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 15px auto 0;
+            /* 중앙 정렬 */
+            margin-top: 15px;
+            box-sizing: border-box;
+        }
+
     </style>
 </head>
 
@@ -350,7 +369,7 @@
             <img src="img/xBtn.png" class="close" onclick="closeCheckTask()" alt="닫기 버튼">
             <h2>인증 사진 첨부</h2>
             <input type="file" class="file-upload" accept="image/*" id="taskImageInput">
-            <button class="add-button" id="completeButton" onclick="completeTask()">완료</button> <!-- 수정된 ID -->
+            <button class="completeTask" id="completeButton" onclick="completeTask()">완료</button> <!-- 수정된 ID -->
         </div>
     </div>
 
