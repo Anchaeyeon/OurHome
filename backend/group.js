@@ -214,7 +214,7 @@ app.get('/', (req, res) => {
 });
 
 // 서버 시작
-const PORT = process.env.PORT || 3000; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
+const PORT = process.env.PORT || 3001; // 환경변수에서 포트를 가져오고, 없다면 3000번 사용
 app.listen(PORT, () => {
     console.log(`서버가 ${PORT}번 포트에서 실행 중입니다. http://localhost:${PORT}`);
 });
