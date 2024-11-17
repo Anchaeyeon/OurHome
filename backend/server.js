@@ -6,7 +6,7 @@ const sqlite3 = require('sqlite3').verbose();
 const multer = require('multer');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3002;
 
 // 본문 파싱을 위한 미들웨어 등록
 app.use(bodyParser.json());
@@ -105,10 +105,9 @@ app.post('/join', (req, res) => {
     const { userName, userPW1, userPW2 } = req.body;
 
     if (userPW1 !== userPW2) {
-        return res.send('<script>alert("비밀번호가 일치하지 않습니다."); window.location.href = "/";</script>');
+        return res.send('<script>alert("비밀번호가 일치하지 않습니다."); window.location.href = "/join";</script>');
     }
 
-    const newUser = { userName, userPW: userPW1 };
     const usersFilePath = './users.json';
 
     fs.readFile(usersFilePath, 'utf-8', (err, data) => {
@@ -117,6 +116,14 @@ app.post('/join', (req, res) => {
             users = JSON.parse(data);
         }
 
+        // 아이디 중복 체크
+        const existingUser = users.find(u => u.userName === userName);
+        if (existingUser) {
+            return res.send('<script>alert("이미 존재하는 아이디입니다."); window.location.href = "/join";</script>');
+        }
+
+        // 새로운 사용자 추가
+        const newUser = { userName, userPW: userPW1 };
         users.push(newUser);
 
         fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
@@ -128,7 +135,8 @@ app.post('/join', (req, res) => {
     });
 });
 
-app.post('/login', (req, res) => {
+
+app.post('/', (req, res) => {
     const { userName, userPW } = req.body;
     const usersFilePath = './users.json';
 
@@ -144,7 +152,7 @@ app.post('/login', (req, res) => {
         if (user) {
             res.redirect('/AddGroup');
         } else {
-            res.send('<script>alert("아이디 또는 비밀번호가 일치하지 않습니다."); window.location.href = "/login";</script>');
+            res.send('<script>alert("아이디 또는 비밀번호가 일치하지 않습니다."); window.location.href = "/";</script>');
         }
     });
 });
@@ -328,11 +336,11 @@ app.get('/getReward/:userName', (req, res) => {
 
 // 기본 페이지 (main.html) 서빙
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'join.html'));
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+app.get('/join', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'join.html'));
 });
 
 app.get('/AddGroup', (req, res) => {
