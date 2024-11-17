@@ -319,6 +319,29 @@
             box-sizing: border-box;
         }
 
+           /* 파일 업로드 버튼 스타일 */
+        .file-upload {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: #BFE4F9;
+            /* 하늘색 배경 */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            /* 둥근 모서리 */
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        
+         h2 {
+            font-family: 'Pretendard-Regular';
+        }
+        p {
+            font-family: 'Pretendard-Regular';
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 
@@ -357,30 +380,31 @@
                 <button class="addZone" onclick="addZone()">추가</button>
             </div>
         </div>
-
+        <!-- 집안일 추가 모달 -->
         <div id="taskModal" class="modal">
             <div class="modal-content">
                 <img src="img/xBtn.png" class="close" onclick="closeTask()" alt="닫기 버튼">
                 <h2>집안일 추가</h2>
                 <p>완료해야 할 집안일</p>
-                <input type="text" id="taskName">
+                <input type="text" placeholder="집안일 이름" id="taskName">
                 <p>보상</p>
                 <input type="number" name="taskReward" id="taskReward" min="1" max="10" value="1">
                 <button class="addTask" onclick="addTask()">추가</button>
             </div>
         </div>
 
+        <!-- 집안일 완료여부  확인 추가 모달 -->
     <div id="checkTask" class="modal">
         <div class="modal-content">
             <img src="img/xBtn.png" class="close" onclick="closeCheckTask()" alt="닫기 버튼">
             <h2>인증 사진 첨부</h2>
+            <p>완료한 집안일의 인증사진을 첨부</p>
             <input type="file" class="file-upload" accept="image/*" id="taskImageInput">
             <button class="completeTask" id="completeButton" onclick="completeTask()">완료</button> <!-- 수정된 ID -->
         </div>
     </div>
 
-
-    </div>
+ </div>
     <script>
         // 페이지가 로드되면 그룹 이름을 업데이트
         window.onload = updateGroupName;
@@ -670,6 +694,7 @@
                     currentZoneName = zoneDiv.querySelector('.zone-title').innerText; // 구역 이름을 저장
 
                     document.getElementById("taskModal").style.display = "block";
+                    const zoneName = document.getElementById('taskName').value='';
                 }
 
         // 집안일 추가 팝업창 닫기
@@ -685,6 +710,7 @@
         // 구역 추가 팝업창 열기
         function openZoneModal() {
             document.getElementById("ZoneModal").style.display = "block";
+            const zoneName = document.getElementById('zoneName').value = '';
         }
 
         // 구역 추가 팝업창 닫기
