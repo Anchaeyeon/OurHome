@@ -189,6 +189,57 @@
             overflow-y: auto; /* 스크롤 추가 */
             max-height: 700px; /* 높이 조정 */
         }
+
+        /* 완료된 집안일 모달 스타일 */
+        #completedTasksModal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow-y: auto; /* 스크롤 추가 */
+            max-height: 852px; /* 높이 조정 */
+        }
+
+        #completedTasksModal .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #completedTasksList {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .completed-task-item {
+            display: flex;
+            align-items: center;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .completed-task-info {
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        .completed-task-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
     </style>
 </head>
 
@@ -198,7 +249,17 @@
         <svg class="line" width="349" height="25" viewBox="0 0 349 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
         </svg>
-        <img src="img/doorball.png" id="alarm">
+
+        <img src="img/doorball.png" id="alarm" onclick="completedTasks()">
+        <!-- 완료된 집안일 모달 -->
+        <div id="completedTasksModal">
+            <div class="modal-content">
+                <img src="img/xBtn.png" class="close" onclick="closeCompletedTasksModal()" alt="닫기 버튼">
+                <h2>완료된 집안일</h2>
+                <ul id="completedTasksList"></ul>
+            </div>
+        </div>
+
         <button class="groupeAddBtn" onclick="openModal()"> 그룹 추가</button>
         <div id="groupsContainer" onclick="openGroup()"></div> <!--생성된 그룹--->
 
@@ -297,6 +358,37 @@
                     console.log("그룹 목록을 불러오는 데 실패했습니다.", error);
                 });
         }
+
+    function completedTasks() {
+        const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
+        const taskListElement = document.getElementById("completedTasksList"); // 수정된 부분
+        taskListElement.innerHTML = ""; // 기존 내용 지우기
+
+        completedTasks.forEach(task => {
+            const taskItem = document.createElement("li");
+            taskItem.classList.add("completed-task-item"); // 수정된 부분
+
+            const taskName = document.createElement("h3");
+            taskName.textContent = `${task.taskName} - 보상: ⭐ ${task.taskReward}개`;
+
+            const taskImage = document.createElement("img");
+            taskImage.src = task.imageData; // 로컬스토리지에서 가져온 이미지 데이터
+            taskImage.alt = `${task.taskName} 이미지`;
+            taskImage.classList.add("completed-task-image"); // 수정된 부분
+
+            taskItem.appendChild(taskName);
+            taskItem.appendChild(taskImage);
+
+            taskListElement.appendChild(taskItem);
+        });
+
+        // modal 보이기 설정
+        document.getElementById("completedTasksModal").style.display = "block"; // modal 보이기
+    }
+
+   function closeCompletedTasksModal() {
+        document.getElementById("completedTasksModal").style.display = "none"; // 모달 닫기
+    }
 
     </script>
 </body>
