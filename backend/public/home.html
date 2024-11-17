@@ -277,7 +277,8 @@
             margin-top: 10px;
             width: 100%;
             overflow-y: auto;
-            /* 스크롤 추가 */
+            /*
+             스크롤 추가 */
         }
 
         .zone-title {
@@ -294,6 +295,24 @@
             font-size: 16px;
             color: #333;
         }
+
+          /* 집안일 완료 버튼*/
+        .completeTask {
+            display: block;
+            width: 50%;
+            padding: 12px;
+            background-color: #1C98ED;
+            color: white;
+            font-size: 1em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 15px auto 0;
+            /* 중앙 정렬 */
+            margin-top: 15px;
+            box-sizing: border-box;
+        }
+
     </style>
 </head>
 
@@ -311,9 +330,9 @@
         <!--하단바--->
         <div class="Nline"> </div>
         <div class="bottom-nav">
-            <a href="home.html">
-                <img src="img/home-nav.png" class="home">
-            </a>
+          
+                <img src="img/home-nav.png" class="home" id="homeButton">
+           
             <a href="request.html">
                 <img src="img/request-nav.png" class="request">
             </a>
@@ -350,7 +369,7 @@
             <img src="img/xBtn.png" class="close" onclick="closeCheckTask()" alt="닫기 버튼">
             <h2>인증 사진 첨부</h2>
             <input type="file" class="file-upload" accept="image/*" id="taskImageInput">
-            <button class="add-button" id="completeButton" onclick="completeTask()">완료</button> <!-- 수정된 ID -->
+            <button class="completeTask" id="completeButton" onclick="completeTask()">완료</button> <!-- 수정된 ID -->
         </div>
     </div>
 
@@ -386,6 +405,20 @@
             }
         }
 
+        // 홈 버튼 클릭 시 그룹을 URL에 유지하도록 처리
+            document.getElementById("homeButton").addEventListener("click", () => {
+                const groupName = sessionStorage.getItem("selectedGroupName");
+                const groupId = sessionStorage.getItem("selectedGroupId");
+
+                if (groupName && groupId) {
+                    // 그룹 정보가 있다면 URL 파라미터에 추가하여 홈 페이지로 이동
+                    window.location.href = `home.html?groupName=${encodeURIComponent(groupName)}&groupId=${encodeURIComponent(groupId)}`;
+                } else {
+                    // 그룹 정보가 없다면 기본 페이지로 이동
+                    window.location.href = "home.html";
+                }
+            });
+
         // 구역 추가 함수
         function addZone() {
             const zoneName = document.getElementById('zoneName').value;
@@ -409,89 +442,7 @@
                 })
                 .catch(error => console.error('구역 추가 실패:', error));
         }
-
-        // // 구역 목록을 불러오는 함수 (초기 로드 시 한 번만 호출)
-        // function loadZones() {
-        //     const groupName = document.getElementById('groupNameHeader').innerText;
-
-        //     if (!groupName) {
-        //         alert('그룹 이름이 유효하지 않습니다.');
-        //         return;
-        //     }
-
-        //     // 서버에서 구역 목록을 가져옴
-        //     fetch(`/zones/${groupName}`)
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             console.log('불러온 구역 목록:', data);
-
-        //             const zonesContainer = document.getElementById('zonesContainer');
-        //             zonesContainer.innerHTML = ''; // 기존 구역을 지움
-
-        //             // 불러온 구역들을 순차적으로 추가
-        //             data.zones.forEach(zone => {
-        //                 const zoneDiv = document.createElement("div");
-        //                 zoneDiv.className = "zone-container"; // 스타일 적용
-        //                 zoneDiv.id = `zone-${zone.id}`;
-
-        //                 // 구역 이름 표시
-        //                 const zoneTitle = document.createElement("div");
-        //                 zoneTitle.className = "zone-title";
-        //                 zoneTitle.innerText = zone.name;
-
-        //                 // 집안일 리스트 (초기엔 비어있음)
-        //                 const taskList = document.createElement("ul");
-        //                 taskList.className = "task-list";
-        //                 taskList.id = `${zoneDiv.id}-tasks`;
-
-        //                 // 집안일 추가 버튼
-        //                 const taskButton = document.createElement("button");
-        //                 taskButton.className = "task-button";
-        //                 taskButton.innerText = "집안일 추가";
-        //                 taskButton.onclick = () => openTask(zoneDiv.id);
-
-        //                 // 구역 컨테이너에 요소 추가
-        //                 zoneDiv.appendChild(zoneTitle);
-        //                 zoneDiv.appendChild(taskList);
-        //                 zoneDiv.appendChild(taskButton);
-
-        //                 // 구역을 zonesContainer에 추가
-        //                 zonesContainer.appendChild(zoneDiv);
-
-        //                 // 해당 구역에 집안일 목록 로드
-        //                 loadTasks(zone.id, taskList);
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.error('구역 목록 불러오기 실패:', error);
-        //         });
-        // }
-
-        // // 구역 ID에 해당하는 집안일 목록을 불러오는 함수
-        // function loadTasks(zoneId, taskList) {
-        //     fetch(`/tasks/${zoneId}`)
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             console.log('불러온 집안일 목록:', data);
-
-        //             // 기존 집안일 목록을 지움
-        //             taskList.innerHTML = '';
-
-        //             // 불러온 집안일들을 순차적으로 추가
-        //             data.tasks.forEach(task => {
-        //                 const taskItem = document.createElement("li");
-        //                 taskItem.className = "task-item";
-        //                 taskItem.innerText = `${task.name} - 보상: ${task.reward}점`;
-
-        //                 taskList.appendChild(taskItem);
-        //                 taskItem.onclick = () => checkTask(task.name,task.reward);
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.error('집안일 목록 불러오기 실패:', error);
-        //         });
-        // }
-
+        
         // 집안일 추가 함수
         function addTask() {
             const taskName = document.getElementById('taskName').value;
