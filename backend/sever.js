@@ -8,7 +8,7 @@ const multer = require('multer');
 const app = express();
 const PORT = 3000;
 
-// SQLite database setup
+// SQLite database
 const db = new sqlite3.Database('group.db', (err) => {
     if (err) {
         console.error('SQLite 연결 실패:', err);
@@ -17,7 +17,7 @@ const db = new sqlite3.Database('group.db', (err) => {
     }
 });
 
-// Create tables if they don't exist
+// 테이블 생성
 db.serialize(() => {
   // 그룹 테이블 생성 (만약 없다면)
     db.run(`
@@ -83,16 +83,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 파일 업로드 설정 (multer 사용)
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // Save uploaded files to 'uploads' folder
+        cb(null, 'uploads/'); // 'uploads' 폴더에 저장
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Add timestamp to file name
+        cb(null, Date.now() + path.extname(file.originalname));
     },
 });
 
 const upload = multer({ storage: storage });
 
-// Routes for user registration and login
+// 회원가입
 app.post('/join', (req, res) => {
     const { userName, userPW1, userPW2 } = req.body;
 
@@ -100,7 +100,6 @@ app.post('/join', (req, res) => {
         return res.send('<script>alert("비밀번호가 일치하지 않습니다."); window.location.href = "/";</script>');
     }
 
-    const newUser = { userName, userPW: userPW1 };
     const usersFilePath = './users.json';
 
     fs.readFile(usersFilePath, 'utf-8', (err, data) => {
@@ -109,6 +108,14 @@ app.post('/join', (req, res) => {
             users = JSON.parse(data);
         }
 
+        // 아이디 중복 체크
+        const existingUser = users.find(u => u.userName === userName);
+        if (existingUser) {
+            return res.send('<script>alert("이미 존재하는 아이디입니다."); window.location.href = "/";</script>');
+        }
+
+        // 새로운 사용자 추가
+        const newUser = { userName, userPW: userPW1 };
         users.push(newUser);
 
         fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
@@ -120,6 +127,7 @@ app.post('/join', (req, res) => {
     });
 });
 
+// 로그인
 app.post('/login', (req, res) => {
     const { userName, userPW } = req.body;
     const usersFilePath = './users.json';
@@ -355,5 +363,5 @@ app.get('/AddGroup', (req, res) => {
 
 // 서버 시작
 app.listen(PORT, () => {
-    console.log(`서버가 http://localhost:${PORT} 실행 중입니다.`);
+    console.log(`서버가 http://localhost:${PORT} 실행 중`);
 });
