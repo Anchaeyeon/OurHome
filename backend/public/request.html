@@ -202,6 +202,11 @@
             overflow-y: auto; /* 스크롤 추가 */
             height: 550px; /* 높이 조정 */
         }
+         /* 스크롤바 숨기기 */
+        .circleContainer::-webkit-scrollbar {
+            display: none;
+            /* 스크롤바 숨기기 */
+        }
           /* 내 프로필 */
         .circle-container1 {
             display: flex;
@@ -531,9 +536,9 @@
 
         <!-- 하단 네비게이션 -->
         <div class="bottom-nav">
-            <a href="home.html">
-                <img src="img/home-nav.png" class="home">
-            </a>
+        
+                <img src="img/home-nav.png" class="home" id="homeButton">
+           
             <a href="request.html">
                 <img src="img/request-nav.png" class="request">
             </a>
@@ -545,6 +550,20 @@
 
    
 <script>
+
+     // 홈 버튼 클릭 시 그룹을 URL에 유지하도록 처리
+        document.getElementById("homeButton").addEventListener("click", () => {
+            const groupName = sessionStorage.getItem("selectedGroupName");
+            const groupId = sessionStorage.getItem("selectedGroupId");
+
+            if (groupName && groupId) {
+                // 그룹 정보가 있다면 URL 파라미터에 추가하여 홈 페이지로 이동
+                window.location.href = `home.html?groupName=${encodeURIComponent(groupName)}&groupId=${encodeURIComponent(groupId)}`;
+            } else {
+                // 그룹 정보가 없다면 기본 페이지로 이동
+                window.location.href = "home.html";
+            }
+        });
 
         // 화면 전환 함수
             function showContent(contentId) {
