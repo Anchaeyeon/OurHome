@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 const multer = require('multer');
+const session = require('express-session');
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +13,12 @@ const PORT = 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// 세션 설정
+app.use(session({
+    secret: 'yourSecretKey',
+    resave: false,
+    saveUninitialized: true,
+}));
 
 // SQLite database setup
 const db = new sqlite3.Database('group.db', (err) => {
@@ -22,61 +29,12 @@ const db = new sqlite3.Database('group.db', (err) => {
     }
 });
 
-// Create tables if they don't exist
+// 테이블 생성
 db.serialize(() => {
-  // 그룹 테이블 생성 (만약 없다면)
-    db.run(`
-        CREATE TABLE IF NOT EXISTS groups (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            image TEXT
-        )
-    `);
-
-    // 구역 테이블 생성 (만약 없다면)
-    db.run(`
-        CREATE TABLE IF NOT EXISTS zones (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            group_id INTEGER,
-            name TEXT NOT NULL,
-            FOREIGN KEY (group_id) REFERENCES groups(id)
-        )
-    `);
-
-    // 집안일 테이블 생성 (만약 없다면)
-    db.run(`
-        CREATE TABLE IF NOT EXISTS tasks (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            zone_id INTEGER,
-            name TEXT NOT NULL,
-            reward INTEGER DEFAULT 0,
-            completed INTEGER DEFAULT 0,
-            FOREIGN KEY (zone_id) REFERENCES zones(id)
-        )
-    `);
-
-    // 사용자 테이블 생성 (만약 없다면)
-    db.run(`CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        reward INTEGER DEFAULT 0
-    )`);
-
-    // 기본 사용자 "나" 추가 (만약 없다면)
-    db.get('SELECT id FROM users WHERE name = "나"', (err, row) => {
-        if (err) {
-            console.error('서버 오류: 사용자 조회 실패', err);
-        }
-        if (!row) {
-            db.run('INSERT INTO users (name) VALUES ("나")', (err) => {
-                if (err) {
-                    console.error('서버 오류: 기본 사용자 추가 실패', err);
-                } else {
-                    console.log('기본 사용자 "나"가 추가되었습니다.');
-                }
-            });
-        }
-    });
+    db.run(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, userName TEXT NOT NULL, userPW TEXT NOT NULL, reward INTEGER DEFAULT 0)`);
+    db.run(`CREATE TABLE IF NOT EXISTS groups (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, name TEXT NOT NULL, image TEXT, FOREIGN KEY (user_id) REFERENCES users(id))`);
+    db.run(`CREATE TABLE IF NOT EXISTS zones (id INTEGER PRIMARY KEY AUTOINCREMENT, group_id INTEGER, name TEXT NOT NULL, FOREIGN KEY (group_id) REFERENCES groups(id))`);
+    db.run(`CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, zone_id INTEGER, name TEXT NOT NULL, reward INTEGER DEFAULT 0, completed INTEGER DEFAULT 0, FOREIGN KEY (zone_id) REFERENCES zones(id))`);
 });
 
 
@@ -101,69 +59,53 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// 회원가입api
+// 회원가입 API
 app.post('/join', (req, res) => {
     const { userName, userPW1, userPW2 } = req.body;
-
     if (userPW1 !== userPW2) {
         return res.send('<script>alert("비밀번호가 일치하지 않습니다."); window.location.href = "/join";</script>');
     }
-
-    const usersFilePath = './users.json';
-
-    fs.readFile(usersFilePath, 'utf-8', (err, data) => {
-        let users = [];
-        if (!err && data) {
-            users = JSON.parse(data);
-        }
-
-        // 아이디 중복 체크
-        const existingUser = users.find(u => u.userName === userName);
-        if (existingUser) {
+    db.get('SELECT * FROM users WHERE userName = ?', [userName], (err, row) => {
+        if (row) {
             return res.send('<script>alert("이미 존재하는 아이디입니다."); window.location.href = "/join";</script>');
         }
-
-        // 새로운 사용자 추가
-        const newUser = { userName, userPW: userPW1 };
-        users.push(newUser);
-
-        fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
+        db.run('INSERT INTO users (userName, userPW) VALUES (?, ?)', [userName, userPW1], (err) => {
             if (err) {
-                return res.send('<script>alert("회원가입 중 오류가 발생했습니다."); window.location.href = "/";</script>');
+                return res.send('<script>alert("회원가입 중 오류가 발생했습니다."); window.location.href = "/join";</script>');
             }
             res.redirect('/');
         });
     });
 });
 
-
+// 로그인 API
 app.post('/', (req, res) => {
     const { userName, userPW } = req.body;
-    const usersFilePath = './users.json';
-
-    fs.readFile(usersFilePath, 'utf-8', (err, data) => {
-        if (err) {
-            return res.send('<script>alert("로그인 중 오류가 발생했습니다."); window.location.href = "/";</script>');
+    db.get('SELECT * FROM users WHERE userName = ? AND userPW = ?', [userName, userPW], (err, user) => {
+        if (err || !user) {
+            return res.send('<script>alert("아이디 또는 비밀번호가 일치하지 않습니다."); window.location.href = "/";</script>');
         }
-
-        const users = JSON.parse(data);
-
-        const user = users.find(u => u.userName === userName && u.userPW === userPW);
-
-        if (user) {
-            res.redirect('/AddGroup');
-        } else {
-            res.send('<script>alert("아이디 또는 비밀번호가 일치하지 않습니다."); window.location.href = "/";</script>');
-        }
+        req.session.userId = user.id;
+        req.session.userName = user.userName;
+        res.redirect('/AddGroup');
     });
+});
+
+// 사용자별 그룹 페이지
+app.get('/AddGroup', (req, res) => {
+    if (!req.session.userId) {
+        return res.redirect('/');
+    }
+    res.sendFile(path.join(__dirname, 'public', 'Main.html'));
 });
 
 // 그룹 추가 API
 app.post('/addGroup', upload.single('groupImage'), (req, res) => {
+    const userId = req.session.userId;
     const groupName = req.body.groupName;
     const imagePath = `/uploads/${req.file.filename}`;
 
-    db.run(`INSERT INTO groups (name, image) VALUES (?, ?)`, [groupName, imagePath], (err) => {
+    db.run('INSERT INTO groups (user_id, name, image) VALUES (?, ?, ?)', [userId, groupName, imagePath], (err) => {
         if (err) {
             return res.status(500).json({ message: '그룹 추가 실패' });
         }
@@ -171,9 +113,10 @@ app.post('/addGroup', upload.single('groupImage'), (req, res) => {
     });
 });
 
-// 그룹 목록 조회 API
+// 사용자별 그룹 목록 조회 API
 app.get('/groups', (req, res) => {
-    db.all('SELECT * FROM groups', [], (err, groups) => {
+    const userId = req.session.userId;
+    db.all('SELECT * FROM groups WHERE user_id = ?', [userId], (err, groups) => {
         if (err) {
             return res.status(500).json({ message: '그룹 목록 조회 실패' });
         }
@@ -291,49 +234,75 @@ app.delete('/deleteTask/:taskId', (req, res) => {
   });
 });
 
+
 // 리워드 업데이트 API
 app.post('/updateReward', (req, res) => {
-  const { userName, taskReward } = req.body;
+    const { taskReward } = req.body;
+    const userId = req.session.userId;
 
-  // 사용자 이름으로 리워드 업데이트
-  db.get('SELECT reward FROM users WHERE name = ?', [userName], (err, row) => {
-      if (err) {
-          return res.status(500).json({ message: '서버 오류: 사용자 조회 실패' });
-      }
-      if (!row) {
-          return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
-      }
+    // 세션에 사용자 ID가 없으면 오류 반환
+    if (!userId) {
+        return res.status(401).json({ message: '로그인이 필요합니다.' });
+    }
 
-      // 기존 리워드에 추가
-      const newReward = row.reward + taskReward;
+    const rewardValue = Number(taskReward);
+    if (isNaN(rewardValue)) {
+        return res.status(400).json({ message: '잘못된 보상 값입니다.' });
+    }
 
-      // 리워드 업데이트
-      db.run('UPDATE users SET reward = ? WHERE name = ?', [newReward, userName], (err) => {
-          if (err) {
-              return res.status(500).json({ message: '서버 오류: 리워드 업데이트 실패' });
-          }
-          res.status(200).json({ message: '리워드가 업데이트되었습니다.', newReward });
-      });
-  });
+    // 사용자 ID로 리워드 조회 및 업데이트
+    db.get('SELECT reward FROM users WHERE id = ?', [userId], (err, row) => {
+        if (err) {
+            return res.status(500).json({ message: '서버 오류: 사용자 조회 실패' });
+        }
+        if (!row) {
+            return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+        }
+
+        const newReward = row.reward + rewardValue;
+
+        // 리워드 업데이트
+        db.run('UPDATE users SET reward = ? WHERE id = ?', [newReward, userId], function (err) {
+            if (err) {
+                return res.status(500).json({ message: '서버 오류: 리워드 업데이트 실패' });
+            }
+            res.status(200).json({ message: '리워드가 업데이트되었습니다.', newReward });
+        });
+    });
 });
 
-// 사용자의 리워드를 가져오는 API
-app.get('/getReward/:userName', (req, res) => {
-  const userName = req.params.userName;
+// 세션 기반으로 사용자의 리워드를 가져오는 API
+app.get('/getReward', (req, res) => {
+    const userId = req.session.userId;
 
-  // 사용자 이름으로 리워드 조회
-  db.get('SELECT reward FROM users WHERE name = ?', [userName], (err, row) => {
-      if (err) {
-          return res.status(500).json({ message: '서버 오류: 사용자 조회 실패' });
-      }
-      if (!row) {
-          return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
-      }
+    if (!userId) {
+        return res.status(401).json({ message: '로그인이 필요합니다.' });
+    }
 
-      // 리워드 반환
-      res.status(200).json({ reward: row.reward });
-  });
+    // 세션에 저장된 사용자 ID로 리워드 조회
+    db.get('SELECT reward FROM users WHERE id = ?', [userId], (err, row) => {
+        if (err) {
+            return res.status(500).json({ message: '서버 오류: 리워드 조회 실패' });
+        }
+        if (!row) {
+            return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+        }
+
+        res.status(200).json({ reward: row.reward });
+    });
 });
+
+
+// 로그아웃 API
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ message: '로그아웃 중 오류 발생' });
+        }
+        res.redirect('/');
+    });
+});
+
 
 // 기본 페이지 (main.html) 서빙
 app.get('/', (req, res) => {
