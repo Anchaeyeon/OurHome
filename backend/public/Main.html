@@ -275,7 +275,8 @@
             <path d="M2 12H351V13.5625H2V12Z" fill="black" fill-opacity="0.3" />
         </svg>
 
-        <img src="img/doorball.png" id="alarm" onclick="completedTasks()">
+        <img src="img/doorball.png" id="alarm" onclick="completedTasks()">  
+
         <!-- 완료된 집안일 모달 -->
         <div id="completedTasksModal">
             <div class="modal-content">
@@ -289,7 +290,7 @@
         <div id="groupsContainer" onclick="openGroup()"></div> <!--생성된 그룹--->
 
         <!-- The Modal -->
-        <div id="myModal" class="modal">
+        <div id="groupModal" class="modal">
             <div class="modal-content">
                 <img src="img/xBtn.png" class="close" onclick="closeModal()" alt="닫기 버튼">
                 <h2>그룹 추가</h2>
@@ -304,11 +305,11 @@
 
     <script>  //그룹추가 모달
         function openModal() {
-            document.getElementById("myModal").style.display = "block";
+            document.getElementById("groupModal").style.display = "block";
         }
 
         function closeModal() {
-            document.getElementById("myModal").style.display = "none";
+            document.getElementById("groupModal").style.display = "none";
         }
 
         function addGroup() {
