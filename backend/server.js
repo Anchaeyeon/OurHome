@@ -87,12 +87,12 @@ app.post('/', (req, res) => {
         }
         req.session.userId = user.id;
         req.session.userName = user.userName;
-        res.redirect('/AddGroup');
+        res.redirect('/openMain');
     });
 });
 
 // 사용자별 그룹 페이지
-app.get('/AddGroup', (req, res) => {
+app.get('/openMain', (req, res) => {
     if (!req.session.userId) {
         return res.redirect('/');
     }
@@ -143,7 +143,7 @@ app.post('/addZone', (req, res) => {
 
         const groupId = row.id;
 
-        db.run('INSERT INTO zones (name, group_id) VALUES (?, ?)', [zoneName, groupId], (err) => {
+    db.run('INSERT INTO zones (name, group_id) VALUES (?, ?)', [zoneName, groupId], (err) => {
             if (err) {
                 return res.status(500).json({ message: '서버 오류: 구역 추가 실패' });
             }
@@ -313,7 +313,7 @@ app.get('/join', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'join.html'));
 });
 
-app.get('/AddGroup', (req, res) => {
+app.get('/openMain', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Main.html'));
 });
 
