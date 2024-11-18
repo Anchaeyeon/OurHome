@@ -20,7 +20,7 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-// SQLite database setup
+// SQLite database
 const db = new sqlite3.Database('group.db', (err) => {
     if (err) {
         console.error('SQLite 연결 실패:', err);
@@ -50,7 +50,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // 파일 업로드 설정
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, 'uploads/'); // 'uploads' 폴더에 저장
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
@@ -59,14 +59,24 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// 회원가입 API
+// 회원가입api
 app.post('/join', (req, res) => {
     const { userName, userPW1, userPW2 } = req.body;
     if (userPW1 !== userPW2) {
         return res.send('<script>alert("비밀번호가 일치하지 않습니다."); window.location.href = "/join";</script>');
     }
-    db.get('SELECT * FROM users WHERE userName = ?', [userName], (err, row) => {
-        if (row) {
+
+    const usersFilePath = './users.json';
+
+    fs.readFile(usersFilePath, 'utf-8', (err, data) => {
+        let users = [];
+        if (!err && data) {
+            users = JSON.parse(data);
+        }
+
+        // 아이디 중복 체크
+        const existingUser = users.find(u => u.userName === userName);
+        if (existingUser) {
             return res.send('<script>alert("이미 존재하는 아이디입니다."); window.location.href = "/join";</script>');
         }
         db.run('INSERT INTO users (userName, userPW) VALUES (?, ?)', [userName, userPW1], (err) => {
@@ -78,7 +88,7 @@ app.post('/join', (req, res) => {
     });
 });
 
-// 로그인 API
+
 app.post('/', (req, res) => {
     const { userName, userPW } = req.body;
     db.get('SELECT * FROM users WHERE userName = ? AND userPW = ?', [userName, userPW], (err, user) => {
@@ -129,7 +139,7 @@ app.post('/addZone', (req, res) => {
     const { zoneName, groupName } = req.body;
 
     if (!zoneName || !groupName) {
-        return res.status(400).json({ message: '구역 이름과 그룹 이름을 모두 제공해야 합니다.' });
+        return res.status(400).json({ message: '구역 이름과 그룹 이름을 모두 추가해야 합니다.' });
     }
 
     // 그룹 이름으로 그룹 ID 찾기
@@ -179,7 +189,7 @@ app.post('/addTask', (req, res) => {
 
   // 구역 이름과 집안일 이름이 제공되지 않으면 에러 반환
   if (!zoneName || !taskName) {
-      return res.status(400).json({ message: '구역 이름과 집안일 이름을 모두 제공해야 합니다.' });
+      return res.status(400).json({ message: '구역 이름과 집안일 이름을 모두 추가해야 합니다.' });
   }
 
   // 구역 이름으로 구역 ID 찾기
@@ -319,5 +329,5 @@ app.get('/AddGroup', (req, res) => {
 
 // 서버 시작
 app.listen(PORT, () => {
-    console.log(`서버가 http://localhost:${PORT} 실행 중입니다.`);
+    console.log(`서버 http://localhost:${PORT} 실행 중`);
 });
