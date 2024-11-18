@@ -748,22 +748,25 @@
                     }
 
                     // 사용자 리워드를 업데이트하는 함수
-function updateUserReward(taskReward) {
-    const userName = '나';  // 예시로 '사용자이름'을 사용합니다.
-
-    fetch('/updateReward', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userName, taskReward })
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('리워드 업데이트 완료:', data);
+    function updateUserReward(taskReward) {
+        fetch('/updateReward', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ taskReward })
         })
-        .catch(error => {
-            console.error('리워드 업데이트 실패:', error);
-        });
-}
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    console.log('리워드 업데이트 완료:', data.message, '새 리워드:', data.newReward);
+                } else {
+                    console.error('리워드 업데이트 실패:', data);
+                }
+            })
+            .catch(error => {
+                console.error('리워드 업데이트 실패:', error);
+            });
+    }
+
         
     </script>
 

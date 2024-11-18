@@ -181,7 +181,7 @@
 
     // 페이지 로드 시 리워드 가져오기
     window.onload = function () {
-        fetch('/getReward/나')  // '나'라는 사용자에 대한 리워드 가져오기
+        fetch('/getReward')
             .then(response => response.json())
             .then(data => {
                 if (data.reward !== undefined) {
@@ -192,7 +192,8 @@
                 }
             })
             .catch(error => console.error('서버와 연결 실패:', error));
-    }
+    };
+
     
 </script>
 

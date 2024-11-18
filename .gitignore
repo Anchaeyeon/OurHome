@@ -1,8 +1,12 @@
 # backend 폴더 내 데이터베이스 파일 무시
-/backend/group.db
+backend/group.db
 
 # backend 폴더 내 사용자 데이터 파일 무시
-/backend/user.json
+backend/users.json
 
 # backend/uploads 폴더 내 모든 파일 무시
-/backend/uploads/
+backend/uploads/
+
+frontend/
+
+*.db
