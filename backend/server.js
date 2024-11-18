@@ -20,7 +20,7 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-// SQLite database
+// SQLite database setup
 const db = new sqlite3.Database('group.db', (err) => {
     if (err) {
         console.error('SQLite 연결 실패:', err);
@@ -50,7 +50,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // 파일 업로드 설정
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // 'uploads' 폴더에 저장
+        cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
@@ -59,24 +59,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// 회원가입api
+// 회원가입 API
 app.post('/join', (req, res) => {
     const { userName, userPW1, userPW2 } = req.body;
     if (userPW1 !== userPW2) {
         return res.send('<script>alert("비밀번호가 일치하지 않습니다."); window.location.href = "/join";</script>');
     }
-
-    const usersFilePath = './users.json';
-
-    fs.readFile(usersFilePath, 'utf-8', (err, data) => {
-        let users = [];
-        if (!err && data) {
-            users = JSON.parse(data);
-        }
-
-        // 아이디 중복 체크
-        const existingUser = users.find(u => u.userName === userName);
-        if (existingUser) {
+    db.get('SELECT * FROM users WHERE userName = ?', [userName], (err, row) => {
+        if (row) {
             return res.send('<script>alert("이미 존재하는 아이디입니다."); window.location.href = "/join";</script>');
         }
         db.run('INSERT INTO users (userName, userPW) VALUES (?, ?)', [userName, userPW1], (err) => {
@@ -88,7 +78,7 @@ app.post('/join', (req, res) => {
     });
 });
 
-
+// 로그인 API
 app.post('/', (req, res) => {
     const { userName, userPW } = req.body;
     db.get('SELECT * FROM users WHERE userName = ? AND userPW = ?', [userName, userPW], (err, user) => {
@@ -139,7 +129,7 @@ app.post('/addZone', (req, res) => {
     const { zoneName, groupName } = req.body;
 
     if (!zoneName || !groupName) {
-        return res.status(400).json({ message: '구역 이름과 그룹 이름을 모두 추가해야 합니다.' });
+        return res.status(400).json({ message: '구역 이름과 그룹 이름을 모두 제공해야 합니다.' });
     }
 
     // 그룹 이름으로 그룹 ID 찾기
@@ -179,69 +169,69 @@ app.get('/zones/:groupName', (req, res) => {
                 return res.status(500).json({ message: '서버 오류: 구역 목록 조회 실패' });
             }
             res.status(200).json({ zones });
-        }); 
+        });
     });
 });
 
 // 집안일 추가 API
 app.post('/addTask', (req, res) => {
-  const { zoneName, taskName, taskReward, completeTask } = req.body;
+    const { zoneName, taskName, taskReward, completeTask } = req.body;
 
-  // 구역 이름과 집안일 이름이 제공되지 않으면 에러 반환
-  if (!zoneName || !taskName) {
-      return res.status(400).json({ message: '구역 이름과 집안일 이름을 모두 추가해야 합니다.' });
-  }
+    // 구역 이름과 집안일 이름이 제공되지 않으면 에러 반환
+    if (!zoneName || !taskName) {
+        return res.status(400).json({ message: '구역 이름과 집안일 이름을 모두 제공해야 합니다.' });
+    }
 
-  // 구역 이름으로 구역 ID 찾기
-  db.get('SELECT id FROM zones WHERE name = ?', [zoneName], (err, row) => {
-      if (err) {
-          return res.status(500).json({ message: '서버 오류: 구역 조회 실패' });
-      }
-      if (!row) {
-          return res.status(404).json({ message: '구역을 찾을 수 없습니다.' });
-      }
+    // 구역 이름으로 구역 ID 찾기
+    db.get('SELECT id FROM zones WHERE name = ?', [zoneName], (err, row) => {
+        if (err) {
+            return res.status(500).json({ message: '서버 오류: 구역 조회 실패' });
+        }
+        if (!row) {
+            return res.status(404).json({ message: '구역을 찾을 수 없습니다.' });
+        }
 
-      const zoneId = row.id;
+        const zoneId = row.id;
 
-      // 집안일 추가
-      db.run('INSERT INTO tasks (name, reward, completed, zone_id) VALUES (?, ?, ?, ?)', [taskName, taskReward, completeTask, zoneId], (err) => {
-          if (err) {
-              return res.status(500).json({ message: '서버 오류: 집안일 추가 실패', error: err.message });
-          }
-          res.status(200).json({ message: `${zoneName}에 ${taskName} 집안일이 추가되었습니다. 보상:${taskReward}` });
-      });
-  });
+        // 집안일 추가
+        db.run('INSERT INTO tasks (name, reward, completed, zone_id) VALUES (?, ?, ?, ?)', [taskName, taskReward, completeTask, zoneId], (err) => {
+            if (err) {
+                return res.status(500).json({ message: '서버 오류: 집안일 추가 실패', error: err.message });
+            }
+            res.status(200).json({ message: `${zoneName}에 ${taskName} 집안일이 추가되었습니다. 보상:${taskReward}` });
+        });
+    });
 });
 
 // 구역에 해당하는 집안일 불러오기 API
 app.get('/tasks/:zoneId', (req, res) => {
-  const zoneId = req.params.zoneId;
+    const zoneId = req.params.zoneId;
 
-  // 해당 구역 ID에 해당하는 집안일을 가져옴
-  db.all('SELECT id, name, reward, completed FROM tasks WHERE zone_id = ?', [zoneId], (err, rows) => {
-      if (err) {
-          return res.status(500).json({ message: '서버 오류: 집안일 조회 실패' });
-      }
+    // 해당 구역 ID에 해당하는 집안일을 가져옴
+    db.all('SELECT id, name, reward, completed FROM tasks WHERE zone_id = ?', [zoneId], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ message: '서버 오류: 집안일 조회 실패' });
+        }
 
-      if (rows.length === 0) {
-          return res.status(404).json({ message: '집안일이 없습니다.' });
-      }
+        if (rows.length === 0) {
+            return res.status(404).json({ message: '집안일이 없습니다.' });
+        }
 
-      res.status(200).json({ tasks: rows });
-  });
+        res.status(200).json({ tasks: rows });
+    });
 });
 
 // 집안일 삭제 API
 app.delete('/deleteTask/:taskId', (req, res) => {
-  const taskId = req.params.taskId;
+    const taskId = req.params.taskId;
 
-  // 해당 taskId를 가진 집안일을 삭제
-  db.run('DELETE FROM tasks WHERE id = ?', [taskId], (err) => {
-      if (err) {
-          return res.status(500).json({ message: '서버 오류: 집안일 삭제 실패' });
-      }
-      res.status(200).json({ message: '집안일이 삭제되었습니다.' });
-  });
+    // 해당 taskId를 가진 집안일을 삭제
+    db.run('DELETE FROM tasks WHERE id = ?', [taskId], (err) => {
+        if (err) {
+            return res.status(500).json({ message: '서버 오류: 집안일 삭제 실패' });
+        }
+        res.status(200).json({ message: '집안일이 삭제되었습니다.' });
+    });
 });
 
 
@@ -325,9 +315,9 @@ app.get('/join', (req, res) => {
 
 app.get('/AddGroup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Main.html'));
-}); 
+});
 
 // 서버 시작
 app.listen(PORT, () => {
-    console.log(`서버 http://localhost:${PORT} 실행 중`);
+    console.log(`서버가 http://localhost:${PORT} 실행 중입니다.`);
 });
