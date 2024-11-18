@@ -7,6 +7,11 @@ backend/users.json
 # backend/uploads 폴더 내 모든 파일 무시
 backend/uploads/
 
+backend/package-lock.json
+backend/package.json
+backend/node_modules/
+
+backend/.package-lock.json
 frontend/
 
 *.db
