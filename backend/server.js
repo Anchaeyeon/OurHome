@@ -6,7 +6,7 @@ const sqlite3 = require('sqlite3').verbose();
 const multer = require('multer');
 
 const app = express();
-const PORT = 3002;
+const PORT = 3000;
 
 // 본문 파싱을 위한 미들웨어 등록
 app.use(bodyParser.json());
@@ -49,6 +49,7 @@ db.serialize(() => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             zone_id INTEGER,
             name TEXT NOT NULL,
+            reward INTEGER DEFAULT 0,
             completed INTEGER DEFAULT 0,
             FOREIGN KEY (zone_id) REFERENCES zones(id)
         )
@@ -131,7 +132,7 @@ app.post('/join', (req, res) => {
             if (err) {
                 return res.send('<script>alert("회원가입 중 오류가 발생했습니다."); window.location.href = "/";</script>');
             }
-            res.redirect('/login');
+            res.redirect('/');
         });
     });
 });
